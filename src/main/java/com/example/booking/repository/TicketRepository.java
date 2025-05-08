@@ -1,7 +1,7 @@
-package Homework.lesson_47.booking.repository;
+package com.example.booking.repository;
 
-import Homework.lesson_47.booking.model.Ticket;
-import Homework.lesson_47.booking.model.Passenger;
+import com.example.booking.model.Ticket;
+import com.example.booking.model.Passenger;
 import java.util.List;
 
 public interface TicketRepository {

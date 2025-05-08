@@ -1,6 +1,6 @@
-package Homework.lesson_47.booking.repository;
+package com.example.booking.repository;
 
-import Homework.lesson_47.booking.model.Flight;
+import com.example.booking.model.Flight;
 import java.util.List;
 
 public interface FlightRepository {

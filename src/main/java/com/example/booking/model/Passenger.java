@@ -1,4 +1,4 @@
-package Homework.lesson_47.booking.model;
+package com.example.booking.model;
 
 import java.time.LocalDate;
 

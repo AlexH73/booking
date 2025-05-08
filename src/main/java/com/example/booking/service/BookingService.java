@@ -1,8 +1,8 @@
-package Homework.lesson_47.booking.service;
+package com.example.booking.service;
 
-import Homework.lesson_47.booking.model.Ticket;
-import Homework.lesson_47.booking.model.Passenger;
-import Homework.lesson_47.booking.model.Flight;
+import com.example.booking.model.Ticket;
+import com.example.booking.model.Passenger;
+import com.example.booking.model.Flight;
 import java.util.List;
 
 public interface BookingService {

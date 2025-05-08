@@ -1,6 +1,6 @@
-package Homework.lesson_47.booking.repository;
+package com.example.booking.repository;
 
-import Homework.lesson_47.booking.model.Passenger;
+import com.example.booking.model.Passenger;
 
 public interface PassengerRepository {
     Passenger findByPassport(String passportNumber);

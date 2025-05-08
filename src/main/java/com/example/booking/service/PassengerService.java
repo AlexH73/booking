@@ -1,6 +1,6 @@
-package Homework.lesson_47.booking.service;
+package com.example.booking.service;
 
-import Homework.lesson_47.booking.model.Passenger;
+import com.example.booking.model.Passenger;
 
 public interface PassengerService {
     void registerPassenger(Passenger passenger);
