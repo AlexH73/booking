@@ -27,9 +27,9 @@
 1. Клонируйте репозиторий:
 
    ```bash
-   git clone https://github.com/AlexH73/booking.git
+   git clone https://github.com/AlexH73/booking_final_project_57_1.git
    ```
-2. Перейдите в директорию проекта:([marcobehler.com][1])
+2. Перейдите в директорию проекта:
 
    ```bash
    cd booking
