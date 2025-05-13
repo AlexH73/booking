@@ -90,4 +90,17 @@ public class Flight {
     public int hashCode() {
         return Objects.hash(flightNumber, departureCity, arrivalCity, durationInMinutes, totalSeats, availableSeats);
     }
+
+    @Override
+    public String toString() {
+        return "Flight{" +
+                "arrivalCity='" + arrivalCity + '\'' +
+                ", flightNumber='" + flightNumber + '\'' +
+                ", departureCity='" + departureCity + '\'' +
+                ", departureTime=" + departureTime +
+                ", durationInMinutes=" + durationInMinutes +
+                ", totalSeats=" + totalSeats +
+                ", availableSeats=" + availableSeats +
+                '}';
+    }
 }
