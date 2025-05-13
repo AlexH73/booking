@@ -7,4 +7,6 @@ public interface FlightRepository {
     Flight findByFlightNumber(String flightNumber);
     List<Flight> findAvailableFlights(String departureCity, String arrivalCity);
     void updateAvailableSeats(String flightNumber, int newAvailableSeats);
+    boolean addFlight(Flight flight);
+    boolean deleteFlight(Flight flight);
 }
