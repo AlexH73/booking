@@ -1,6 +1,7 @@
 package com.example.library.interfaces;
 
-import practice.models.Book;
+
+import com.example.library.models.Book;
 
 import java.util.List;
 

@@ -1,7 +1,8 @@
 package com.example.library.repositories;
 
-import practice.interfaces.ReaderRepository;
-import practice.models.Reader;
+
+import com.example.library.interfaces.ReaderRepository;
+import com.example.library.models.Reader;
 
 import java.util.List;
 

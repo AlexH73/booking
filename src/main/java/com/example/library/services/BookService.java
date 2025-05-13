@@ -1,6 +1,7 @@
 package com.example.library.services;
 
-import practice.interfaces.BookRepository;
+
+import com.example.library.interfaces.BookRepository;
 
 //Слой бизнес-логики
 public class BookService {

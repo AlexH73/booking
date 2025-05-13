@@ -1,6 +1,6 @@
 package com.example.library.interfaces;
 
-import practice.models.Reader;
+import com.example.library.models.Reader;
 
 import java.util.List;
 

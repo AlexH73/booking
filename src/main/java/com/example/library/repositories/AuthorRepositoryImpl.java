@@ -1,7 +1,8 @@
 package com.example.library.repositories;
 
-import practice.interfaces.AuthorRepository;
-import practice.models.Author;
+
+import com.example.library.interfaces.AuthorRepository;
+import com.example.library.models.Author;
 
 import java.util.ArrayList;
 import java.util.List;
