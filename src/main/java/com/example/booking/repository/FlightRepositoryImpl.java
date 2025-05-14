@@ -4,30 +4,27 @@ import com.example.booking.model.Flight;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FlightRepositoryImpl implements FlightRepository {
     private List<Flight> flights = new ArrayList<>();
 
     @Override
-    public Flight findByFlightNumber(String flightNumber) {
-        for (Flight flight : flights) {
-            if (flight.getFlightNumber().equals(flightNumber)) {
-                return flight;
-            }
-        }
-        return null;
-    }
+public Flight findByFlightNumber(String flightNumber) {
+    return flights.stream()
+        .filter(flight -> flight.getFlightNumber().equals(flightNumber))
+        .findFirst()
+        .orElse(null);
+}
 
     @Override
-    public List<Flight> findAvailableFlights(String departureCity, String arrivalCity) {
-        List<Flight> availableFlights = new ArrayList<>();
-        for (Flight flight : flights) {
-            if (flight.getDepartureCity().equals(departureCity) && flight.getArrivalCity().equals(arrivalCity)) {
-                availableFlights.add(flight);
-            }
-        }
-        return availableFlights;
-    }
+public List<Flight> findAvailableFlights(String departureCity, String arrivalCity) {
+    return flights.stream()
+        .filter(flight -> flight.getDepartureCity().equals(departureCity)
+            && flight.getArrivalCity().equals(arrivalCity)
+            && flight.getAvailableSeats() > 0)
+        .collect(Collectors.toList());
+}
 
     @Override
     public void updateAvailableSeats(String flightNumber, int newAvailableSeats) {
