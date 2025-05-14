@@ -19,7 +19,7 @@ public class Passenger {
         this.phoneNumber = phoneNumber;
     }
 
-    public String generatePassportNumber() {
+    public static String generatePassportNumber() {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         int length = 10;
         Random random = new Random();

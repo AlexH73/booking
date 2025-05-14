@@ -1,5 +1,6 @@
 package com.example.booking.repository;
 
+import com.example.booking.exceptions.IncorrectPassangerDataException;
 import com.example.booking.model.Passenger;
 
 import java.util.HashMap;
@@ -35,8 +36,11 @@ public class PassengerRepositoryImpl implements PassengerRepository {
      * @return объект {@code Passenger} или {@code null}, если не найден
      */
     @Override
-    public Passenger findByPassport(String passportNumber) {
-        return null; // реализацию студент должен написать сам
+    public Passenger findByPassport(String passportNumber) throws IncorrectPassangerDataException {
+        if (passportNumber == null || passportNumber.isBlank()) {
+            throw new IncorrectPassangerDataException("Ошибка! Номер паспорта не может быть пустым.");
+        }
+        return storage.get(passportNumber);
     }
 
     /**
@@ -53,8 +57,12 @@ public class PassengerRepositoryImpl implements PassengerRepository {
      * @param passenger объект, который нужно сохранить
      */
     @Override
-    public void save(Passenger passenger) {
-        // реализацию студент должен написать сам
+    public boolean addPassenger(Passenger passenger) throws IncorrectPassangerDataException {
+        if (passenger == null) {
+            throw new IncorrectPassangerDataException("Ошибка! Объект passenger не может быть равен null");
+        }
+        storage.put(passenger.getPassportNumber(), passenger);
+        return findByPassport(passenger.getPassportNumber()) != null;
     }
 
     /**
@@ -70,8 +78,19 @@ public class PassengerRepositoryImpl implements PassengerRepository {
      *
      * @param passenger обновлённый объект {@code Passenger}
      */
-    public void update(Passenger passenger) {
-        // реализацию студент должен написать сам
+    @Override
+    public boolean update(Passenger passenger) throws IncorrectPassangerDataException {
+        if (passenger == null) {
+            throw new IncorrectPassangerDataException("Ошибка! Объект passenger не может быть равен null");
+        }
+        if (findByPassport(passenger.getPassportNumber()) == null) {
+            return false;
+        }
+        storage.put(passenger.getPassportNumber(), passenger);
+
+        Passenger passengerFromStorage = storage.get(passenger.getPassportNumber());
+
+        return passenger.equals(passengerFromStorage);
     }
 
     /**
@@ -86,8 +105,14 @@ public class PassengerRepositoryImpl implements PassengerRepository {
      *
      * @param passportNumber номер паспорта удаляемого пассажира
      */
-    public void deleteByPassport(String passportNumber) {
-        // реализацию студент должен написать сам
+    @Override
+    public boolean deleteByPassport(String passportNumber) throws IncorrectPassangerDataException {
+        if (passportNumber == null || passportNumber.isBlank()) {
+            throw new IncorrectPassangerDataException("Ошибка! Номер паспорта не может быть пустым.");
+        }
+        storage.remove(passportNumber);
+
+        return true;
     }
 
     /**
@@ -104,7 +129,8 @@ public class PassengerRepositoryImpl implements PassengerRepository {
      *
      * @return список объектов {@code Passenger}
      */
+    @Override
     public List<Passenger> findAll() {
-        return null; // реализацию студент должен написать сам
+        return new ArrayList<>(storage.values());
     }
 }
