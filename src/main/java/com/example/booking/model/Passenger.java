@@ -2,6 +2,7 @@ package com.example.booking.model;
 
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Random;
 
 public class Passenger {
     private String name;
@@ -16,6 +17,18 @@ public class Passenger {
         this.dateOfBirth = dateOfBirth;
         this.email = email;
         this.phoneNumber = phoneNumber;
+    }
+
+    public String generatePassportNumber() {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        int length = 10;
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            int index = random.nextInt(chars.length()); // выбираем индекс от 0 до chars.length() - 1
+            sb.append(chars.charAt(index));
+        }
+        return sb.toString();
     }
 
     public String getName() {
