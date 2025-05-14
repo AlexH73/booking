@@ -3,10 +3,10 @@ package com.example.booking.repository;
 import com.example.booking.model.Passenger;
 import com.example.booking.model.Ticket;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.ArrayList;
 
 /**
  * Реализация интерфейса {@link TicketRepository}.
@@ -37,9 +37,11 @@ public class TicketRepositoryImpl implements TicketRepository {
      * @return найденный билет или null, если не найден
      */
     @Override
-    public Ticket findById(String ticketId) {
-        return null; // реализацию нужно написать по инструкции выше
-    }
+    public String findById(String ticketId) {
+        Ticket ticket = storage.get(ticketId);
+        return ticket != null ? ticket.toString() : "Билет не найден";
+    } // реализацию нужно написать по инструкции выше
+
 
     /**
      * Находит все билеты, принадлежащие заданному пассажиру.
@@ -61,7 +63,25 @@ public class TicketRepositoryImpl implements TicketRepository {
      */
     @Override
     public List<Ticket> findByPassenger(Passenger passenger) {
-        return null; // реализацию нужно написать по шагам выше
+        List<Ticket> tickets = new ArrayList<>();
+        if (passenger != null) {
+            for (Ticket ticket : storage.values()) {
+                if (ticket.getPassenger().equals(passenger)) {
+                    tickets.add(ticket);
+                }
+            }
+        }
+        return tickets;
+    }
+
+@Override
+public List<Ticket> findAll() {
+    return new ArrayList<>(storage.values());
+}
+
+    @Override
+    public List<Ticket> findByStatus(String status) {
+        return List.of();
     }
 
     /**
@@ -79,7 +99,7 @@ public class TicketRepositoryImpl implements TicketRepository {
      * @param ticket билет, который нужно сохранить
      */
     @Override
-    public void save(Ticket ticket) {
+    public boolean saveTicket(Ticket ticket) {
         // реализацию нужно написать по инструкции выше
     }
 
@@ -98,7 +118,12 @@ public class TicketRepositoryImpl implements TicketRepository {
      * @param ticketId идентификатор билета, который нужно удалить
      */
     @Override
-    public void delete(String ticketId) {
+    public boolean delete(String ticketId) {
         // реализацию нужно написать по инструкции выше
+    }
+
+    @Override
+    public boolean update(Ticket ticket) {
+        return false;
     }
 }

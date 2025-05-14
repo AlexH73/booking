@@ -30,7 +30,7 @@ public interface TicketRepository {
      * @param ticketId уникальный ID билета
      * @return объект Ticket, если найден, иначе null
      */
-    Ticket findById(String ticketId);
+    String findById(String ticketId);
 
     /**
      * Находит список билетов, принадлежащих указанному пассажиру.
@@ -41,12 +41,26 @@ public interface TicketRepository {
     List<Ticket> findByPassenger(Passenger passenger);
 
     /**
+     * Возвращает список всех билетов в системе.
+     *
+     * @return список билетов, может быть пустым
+     */
+    List<Ticket> findAll();
+
+    /**
+     * Находит билеты по заданному статусу (например, "ACTIVE" или "CANCELLED").
+     *
+     * @param status статус билетов, которые нужно найти
+     * @return список билетов с указанным статусом
+     */
+    List<Ticket> findByStatus(String status);
+    /**
      * Сохраняет новый билет в систему.
      * Обычно используется при бронировании нового билета.
      *
      * @param ticket объект Ticket, который нужно сохранить
      */
-    void save(Ticket ticket);
+    boolean saveTicket(Ticket ticket);
 
     /**
      * Удаляет билет по его идентификатору.
@@ -54,5 +68,12 @@ public interface TicketRepository {
      *
      * @param ticketId уникальный ID билета, который необходимо удалить
      */
-    void delete(String ticketId);
+    boolean delete(String ticketId);
+    /**
+     * Обновляет билет, например, изменяет его статус.
+            *
+            * @param ticket объект Ticket с обновленными данными
+ * @return true, если обновление прошло успешно, иначе false
+     **/
+    boolean update(Ticket ticket);
 }
