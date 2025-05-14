@@ -101,6 +101,7 @@ public List<Ticket> findAll() {
     @Override
     public boolean saveTicket(Ticket ticket) {
         // реализацию нужно написать по инструкции выше
+        return false;
     }
 
     /**
@@ -120,6 +121,7 @@ public List<Ticket> findAll() {
     @Override
     public boolean delete(String ticketId) {
         // реализацию нужно написать по инструкции выше
+        return false;
     }
 
     @Override
