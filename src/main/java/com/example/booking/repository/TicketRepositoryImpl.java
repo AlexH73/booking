@@ -61,7 +61,7 @@ public class TicketRepositoryImpl implements TicketRepository {
      */
     @Override
     public List<Ticket> findByPassenger(Passenger passenger) {
-        return List.of(); // реализацию нужно написать по шагам выше
+        return null; // реализацию нужно написать по шагам выше
     }
 
     /**

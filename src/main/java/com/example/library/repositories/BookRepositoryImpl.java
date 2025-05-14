@@ -1,7 +1,9 @@
 package com.example.library.repositories;
 
-import practice.interfaces.BookRepository;
-import practice.models.Book;
+
+
+import com.example.library.interfaces.BookRepository;
+import com.example.library.models.Book;
 
 import java.util.List;
 
