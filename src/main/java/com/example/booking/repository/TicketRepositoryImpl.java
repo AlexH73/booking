@@ -2,6 +2,7 @@ package com.example.booking.repository;
 
 import com.example.booking.model.Passenger;
 import com.example.booking.model.Ticket;
+import com.example.booking.model.TicketStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,8 +81,14 @@ public List<Ticket> findAll() {
 }
 
     @Override
-    public List<Ticket> findByStatus(String status) {
-        return List.of();
+    public List<Ticket> findByStatus(TicketStatus status) {
+        List<Ticket> result = new ArrayList<>();
+        for (Ticket ticket : storage.values()) {
+            if (ticket.getStatus() == status) {
+                result.add(ticket);
+            }
+        }
+        return result;
     }
 
     /**
@@ -99,9 +106,16 @@ public List<Ticket> findAll() {
      * @param ticket билет, который нужно сохранить
      */
     @Override
-    public boolean saveTicket(Ticket ticket) {
-        // реализацию нужно написать по инструкции выше
-        return false;
+    public boolean addTicket(Ticket ticket) {
+        if (ticket == null || ticket.getTicketId() == null) {
+            return false;  // TODO :  Exception
+        }
+        if (storage.containsKey(ticket.getTicketId())) {
+            // TODO: Exception
+            return false;
+        }
+        storage.put(ticket.getTicketId(), ticket);
+        return storage.containsValue(ticket);
     }
 
     /**
@@ -120,12 +134,22 @@ public List<Ticket> findAll() {
      */
     @Override
     public boolean delete(String ticketId) {
-        // реализацию нужно написать по инструкции выше
-        return false;
+        if (ticketId == null) {
+            // TODO :Exception
+            return false;
+        }
+        storage.remove(ticketId);
+        return true;
     }
 
     @Override
     public boolean update(Ticket ticket) {
+        if (ticket == null) {
+            //TODO:Exception
         return false;
+        }
+        storage.put(ticket.getTicketId(), ticket);
+        return storage.containsValue(ticket);
     }
+
 }

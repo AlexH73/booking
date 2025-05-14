@@ -2,6 +2,7 @@ package com.example.booking.repository;
 
 import com.example.booking.model.Ticket;
 import com.example.booking.model.Passenger;
+import com.example.booking.model.TicketStatus;
 
 import java.util.List;
 
@@ -53,14 +54,14 @@ public interface TicketRepository {
      * @param status статус билетов, которые нужно найти
      * @return список билетов с указанным статусом
      */
-    List<Ticket> findByStatus(String status);
+    List<Ticket> findByStatus(TicketStatus status);
     /**
      * Сохраняет новый билет в систему.
      * Обычно используется при бронировании нового билета.
      *
      * @param ticket объект Ticket, который нужно сохранить
      */
-    boolean saveTicket(Ticket ticket);
+    boolean addTicket(Ticket ticket);
 
     /**
      * Удаляет билет по его идентификатору.
