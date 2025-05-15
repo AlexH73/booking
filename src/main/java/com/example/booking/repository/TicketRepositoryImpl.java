@@ -108,7 +108,7 @@ public List<Ticket> findAll() {
     @Override
     public boolean addTicket(Ticket ticket) {
         if (ticket == null || ticket.getTicketId() == null) {
-            return false;  // TODO :  Exception
+            throw new IllegalArgumentException("Ungültiges Ticket: Ticket oder TicketId darf nicht null sein");
         }
         if (storage.containsKey(ticket.getTicketId())) {
             // TODO: Exception
@@ -135,8 +135,7 @@ public List<Ticket> findAll() {
     @Override
     public boolean delete(String ticketId) {
         if (ticketId == null) {
-            // TODO :Exception
-            return false;
+                throw new IllegalArgumentException("Ungültiges Ticket: TicketId darf nicht null sein");
         }
         storage.remove(ticketId);
         return true;
@@ -145,8 +144,8 @@ public List<Ticket> findAll() {
     @Override
     public boolean update(Ticket ticket) {
         if (ticket == null) {
-            //TODO:Exception
-        return false;
+                throw new IllegalArgumentException("Ungültiges Ticket: Ticket darf nicht null sein");
+
         }
         storage.put(ticket.getTicketId(), ticket);
         return storage.containsValue(ticket);
