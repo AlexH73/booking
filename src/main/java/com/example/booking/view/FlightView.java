@@ -5,122 +5,99 @@ import com.example.booking.service.FlightService;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.time.format.DateTimeParseException;
+import java.util.stream.Collectors;
+
 
 /**
  * Класс представления для взаимодействия пользователя с данными о рейсах через консоль.
  * <p>
  * Использует {@link FlightService} для выполнения бизнес-операций и {@link Scanner} для чтения ввода пользователя.
  */
+
+
+
+
 public class FlightView {
 
     private final FlightService flightService;
     private final Scanner scanner;
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm");
 
-
     public FlightView(FlightService flightService, Scanner scanner) {
         this.flightService = flightService;
         this.scanner = scanner;
     }
 
-    /**
-     * Обработка сценария "поиск доступных рейсов".
-     * Пользователь вводит города отправления и назначения, после чего отображаются найденные рейсы.
-     */
-    public void findAvailableFlightsInput() {
-        System.out.print("Введите город отправления: ");
-        String from = scanner.nextLine();
+    private String getUserInput(String message) {
+        System.out.print(message);
+        return scanner.nextLine().trim();
+    }
 
-        System.out.print("Введите город прибытия: ");
-        String to = scanner.nextLine();
+    public String findAvailableFlightsInput() {
+        String from = getUserInput("Введите город отправления: ");
+        String to = getUserInput("Введите город прибытия: ");
 
         List<Flight> flights = flightService.findAvailableFlights(from, to);
-        if (flights.isEmpty()) {
-            System.out.println("Рейсы не найдены.");
-        } else {
-            System.out.println("Найденные рейсы:");
-            for (Flight flight : flights) {
-                System.out.println(flight);
+        return flights.isEmpty() ? "Рейсы не найдены."
+                : "Найденные рейсы:\n" + flights.stream().map(String::valueOf).collect(Collectors.joining("\n"));
+    }
+
+    public String updateAvailableSeatsInput() {
+        String flightNumber = getUserInput("Введите номер рейса: ");
+
+        try {
+            int newSeats = Integer.parseInt(getUserInput("Введите новое количество доступных мест: "));
+            if (newSeats < 0) {
+                return "Ошибка: Количество мест не может быть отрицательным.";
             }
+            flightService.updateAvailableSeats(flightNumber, newSeats);
+            return "Места обновлены.";
+        } catch (NumberFormatException e) {
+            return "Ошибка: Введите корректное число.";
         }
     }
 
-    /**
-     * Обработка сценария "обновление количества доступных мест на рейсе".
-     * Пользователь вводит номер рейса и новое количество мест.
-     */
-    public void updateAvailableSeatsInput() {
-        System.out.print("Введите номер рейса: ");
-        String flightNumber = scanner.nextLine();
+    public String registerFlightInput() {
+        String from = getUserInput("Город отправления: ");
+        String to = getUserInput("Город прибытия: ");
+        String dateStr = getUserInput("Дата и время отправления (пример: 2025-12-01_15:30): ");
 
-        System.out.print("Введите новое количество доступных мест: ");
-        int newSeats = Integer.parseInt(scanner.nextLine());
+        try {
+            LocalDateTime departureTime = LocalDateTime.parse(dateStr, FORMATTER);
+            if (departureTime.isBefore(LocalDateTime.now())) {
+                return "Ошибка: Дата отправления не может быть в прошлом.";
+            }
 
-        flightService.updateAvailableSeats(flightNumber, newSeats);
-        System.out.println("Места обновлены.");
-    }
+            int duration = Integer.parseInt(getUserInput("Продолжительность полёта (в минутах): "));
+            int total = Integer.parseInt(getUserInput("Общее количество мест: "));
 
-    /**
-     * Обработка сценария "регистрация нового рейса".
-     * Пользователь вводит все необходимые параметры.
-     */
-    public void registerFlightInput() {
-        System.out.print("Город отправления: ");
-        String from = scanner.nextLine();
+            if (duration <= 0 || total <= 0) {
+                return "Ошибка: Продолжительность и количество мест должны быть положительными.";
+            }
 
-        System.out.print("Город прибытия: ");
-        String to = scanner.nextLine();
+            Flight flight = new Flight(to, from, departureTime, duration);
+            flight.setTotalSeats(total);
+            flight.setAvailableSeats(total);
 
-        System.out.print("Дата и время отправления (пример: 2025-12-01_15:30): ");
-        String dateStr = scanner.nextLine();
-        LocalDateTime departureTime = LocalDateTime.parse(dateStr, FORMATTER);
+            boolean result = flightService.registerFlight(flight);
+            return result ? "Рейс успешно добавлен." : "Не удалось добавить рейс (возможно, он уже существует).";
 
-        System.out.print("Продолжительность полёта (в минутах): ");
-        int duration = Integer.parseInt(scanner.nextLine());
-
-        System.out.print("Общее количество мест: ");
-        int total = Integer.parseInt(scanner.nextLine());
-
-        Flight flight = new Flight(to, from, departureTime, duration);
-        flight.setTotalSeats(total);
-        flight.setAvailableSeats(total);
-
-        boolean result = flightService.registerFlight(flight);
-        if (result) {
-            System.out.println("Рейс успешно добавлен.");
-        } else {
-            System.out.println("Не удалось добавить рейс (возможно, он уже существует).");
+        } catch (NumberFormatException | DateTimeParseException e) {
+            return "Ошибка: Некорректный формат данных.";
         }
     }
 
-    /**
-     * Обработка сценария "удаление рейса по номеру".
-     */
-    public void deleteFlightInput() {
-        System.out.print("Введите номер рейса для удаления: ");
-        String flightNumber = scanner.nextLine();
-
+    public String deleteFlightInput() {
+        String flightNumber = getUserInput("Введите номер рейса для удаления: ");
         boolean deleted = flightService.deleteFlight(flightNumber);
-        if (deleted) {
-            System.out.println("Рейс успешно удалён.");
-        } else {
-            System.out.println("Рейс не найден или не удалось удалить.");
-        }
+        return deleted ? "Рейс успешно удалён." : "Рейс не найден или не удалось удалить.";
     }
 
-    /**
-     * Показать все рейсы.
-     */
-    public void showAllFlights() {
+    public String showAllFlights() {
         List<Flight> flights = flightService.getAllFlights();
-        if (flights.isEmpty()) {
-            System.out.println("Нет зарегистрированных рейсов.");
-        } else {
-            for (Flight f : flights) {
-                System.out.println(f);
-            }
-        }
+        return flights.isEmpty() ? "Нет зарегистрированных рейсов."
+                : "Список рейсов:\n" + flights.stream().map(String::valueOf).collect(Collectors.joining("\n"));
     }
 }

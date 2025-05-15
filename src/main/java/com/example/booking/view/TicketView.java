@@ -15,6 +15,10 @@ import java.util.Scanner;
  * Класс представления для взаимодействия пользователя с билетами.
  * Использует сервисы бронирования, рейсов и пассажиров.
  */
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
 public class TicketView {
 
     private final BookingService bookingService;
@@ -32,99 +36,71 @@ public class TicketView {
         this.scanner = scanner;
     }
 
-    /**
-     * Оформление нового билета: ввод паспорта и номера рейса.
-     */
-    public void bookTicketInput() {
-        System.out.print("Введите номер паспорта пассажира: ");
-        String passport = scanner.nextLine();
+    private String getUserInput(String message) {
+        System.out.print(message);
+        return scanner.nextLine().trim();
+    }
+
+    public String bookTicketInput() {
+        String passport = getUserInput("Введите номер паспорта пассажира: ");
         Passenger passenger = passengerService.findPassengerByPassport(passport);
 
         if (passenger == null) {
-            System.out.println("Пассажир не найден.");
-            return;
+            return "Ошибка: Пассажир не найден.";
         }
 
-        System.out.print("Введите номер рейса: ");
-        String flightNumber = scanner.nextLine();
+        String flightNumber = getUserInput("Введите номер рейса: ");
         Flight flight = flightService.findByFlightNumber(flightNumber);
 
         if (flight == null) {
-            System.out.println("Рейс не найден.");
-            return;
+            return "Ошибка: Рейс не найден.";
         }
 
         Ticket ticket = bookingService.bookTicket(passenger, flight);
-        if (ticket != null) {
-            System.out.println("Билет успешно оформлен: " + ticket);
-        } else {
-            System.out.println("Не удалось оформить билет.");
+        return ticket != null ? "Билет успешно оформлен: " + ticket : "Ошибка: Не удалось оформить билет.";
+    }
+
+    public String cancelTicketInput() {
+        String ticketId = getUserInput("Введите ID билета для отмены: ");
+
+        Ticket ticket = bookingService.findTicketById(ticketId); // Vorher prüfen, ob Ticket existiert
+        if (ticket == null) {
+            return "Ошибка: Билет не найден.";
         }
+
+        bookingService.cancelTicket(ticketId); // Ticket wird storniert
+        return "Билет успешно отменён.";
     }
 
-    /**
-     * Отмена ранее оформленного билета по ID.
-     */
-    public void cancelTicketInput() {
-        System.out.print("Введите ID билета для отмены: ");
-        String ticketId = scanner.nextLine();
-        bookingService.cancelTicket(ticketId);
-        System.out.println("Билет отменён (если был найден).\n");
-    }
-
-    /**
-     * Показ всех билетов по номеру паспорта.
-     */
-    public void showTicketsByPassenger() {
-        System.out.print("Введите номер паспорта: ");
-        String passport = scanner.nextLine();
+    public String showTicketsByPassenger() {
+        String passport = getUserInput("Введите номер паспорта: ");
         Passenger passenger = passengerService.findPassengerByPassport(passport);
+
         if (passenger == null) {
-            System.out.println("Пассажир не найден.");
-            return;
+            return "Ошибка: Пассажир не найден.";
         }
+
         List<Ticket> tickets = bookingService.getTicketsByPassenger(passenger);
-        if (tickets.isEmpty()) {
-            System.out.println("У пассажира нет билетов.");
-        } else {
-            for (Ticket ticket : tickets) {
-                System.out.println(ticket);
-            }
-        }
+        return tickets.isEmpty() ? "У пассажира нет билетов."
+                : "Билеты пассажира:\n" + tickets.stream().map(String::valueOf).collect(Collectors.joining("\n"));
     }
 
-    /**
-     * Показ всех билетов с возможностью фильтрации по статусу.
-     */
-    public void showTicketsByStatus() {
-        System.out.print("Введите статус билета (ACTIVE / CANCELLED): ");
-        String status = scanner.nextLine();
+    public String showTicketsByStatus() {
+        String status = getUserInput("Введите статус билета (ACTIVE / CANCELLED): ");
+
         try {
             TicketStatus ticketStatus = TicketStatus.valueOf(status.toUpperCase());
             List<Ticket> tickets = bookingService.findTicketsByStatus(ticketStatus);
-            if (tickets.isEmpty()) {
-                System.out.println("Билеты со статусом " + status + " не найдены.");
-            } else {
-                for (Ticket ticket : tickets) {
-                    System.out.println(ticket);
-                }
-            }
+            return tickets.isEmpty() ? "Билеты со статусом " + status + " не найдены."
+                    : "Список билетов:\n" + tickets.stream().map(String::valueOf).collect(Collectors.joining("\n"));
         } catch (IllegalArgumentException e) {
-            System.out.println("Некорректный статус билета.");
+            return "Ошибка: Некорректный статус билета.";
         }
     }
 
-    /**
-     * Показать все билеты в системе.
-     */
-    public void showAllTickets() {
+    public String showAllTickets() {
         List<Ticket> tickets = bookingService.getAllTickets();
-        if (tickets.isEmpty()) {
-            System.out.println("В системе пока нет билетов.");
-        } else {
-            for (Ticket t : tickets) {
-                System.out.println(t);
-            }
-        }
+        return tickets.isEmpty() ? "В системе пока нет билетов."
+                : "Все билеты:\n" + tickets.stream().map(String::valueOf).collect(Collectors.joining("\n"));
     }
 }

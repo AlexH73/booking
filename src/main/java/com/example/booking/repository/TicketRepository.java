@@ -31,7 +31,7 @@ public interface TicketRepository {
      * @param ticketId уникальный ID билета
      * @return объект Ticket, если найден, иначе null
      */
-    String findById(String ticketId);
+    Ticket findById(String ticketId);
 
     /**
      * Находит список билетов, принадлежащих указанному пассажиру.
