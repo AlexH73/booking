@@ -7,133 +7,90 @@ import com.example.booking.view.*;
 import java.util.Scanner;
 
 /**
- * Главный класс приложения.
- *
- * <p>Объединяет все слои: репозитории → сервисы → представления (View).
- * Отображает меню в консоли, в котором пользователь выбирает, с каким модулем он хочет работать:
- * <ul>
- *     <li>Работа с пассажирами</li>
- *     <li>Работа с рейсами</li>
- *     <li>Работа с билетами</li>
- *     <li>Выход</li>
- * </ul>
- *
- * <p>Каждый выбор вызывает соответствующий метод в классе-представлении.
+ * Главное меню и точка входа в консольное приложение.
+ * <p>
+ * Инициализирует все компоненты (репозитории, сервисы, представления) и запускает цикл обработки команд.
  */
 public class MainMenu {
+
+    private final PassengerView passengerView;
+    private final FlightView flightView;
+    private final TicketView ticketView;
+    private final Scanner scanner;
+
+    public MainMenu(PassengerView passengerView, FlightView flightView, TicketView ticketView, Scanner scanner) {
+        this.passengerView = passengerView;
+        this.flightView = flightView;
+        this.ticketView = ticketView;
+        this.scanner = scanner;
+    }
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        // 1. Создание репозиториев
+        // Репозитории
         PassengerRepository passengerRepository = new PassengerRepositoryImpl();
         FlightRepository flightRepository = new FlightRepositoryImpl();
         TicketRepository ticketRepository = new TicketRepositoryImpl();
 
-        // 2. Создание сервисов и передача им репозиториев
+        // Сервисы
         PassengerService passengerService = new PassengerServiceImpl(passengerRepository);
         FlightService flightService = new FlightServiceImpl(flightRepository);
-        BookingService bookingService = new BookingServiceImpl(ticketRepository, flightRepository, passengerRepository);
+        BookingService bookingService = new BookingServiceImpl(ticketRepository, flightRepository);
 
-        // 3. Создание представлений и передача им сервисов + сканера
+        // Представления
         PassengerView passengerView = new PassengerView(passengerService, scanner);
         FlightView flightView = new FlightView(flightService, scanner);
-        TicketView ticketView = new TicketView(bookingService, scanner);
+        TicketView ticketView = new TicketView(bookingService, passengerService, flightService, scanner);
 
-        // 4. Основной цикл меню
-        while (true) {
-            System.out.println("\n=== Система бронирования ===");
-            System.out.println("1. Работа с пассажирами");
-            System.out.println("2. Работа с рейсами");
-            System.out.println("3. Работа с билетами");
-            System.out.println("0. Выход");
-            System.out.print("Выберите пункт: ");
+        // Запуск
+        MainMenu menu = new MainMenu(passengerView, flightView, ticketView, scanner);
+        menu.run();
+    }
 
-            String input = scanner.nextLine();
-
-            switch (input) {
-                case "1":
-                    runPassengerMenu(passengerView);
-                    break;
-                case "2":
-                    runFlightMenu(flightView);
-                    break;
-                case "3":
-                    runTicketMenu(ticketView);
-                    break;
-                case "0":
-                    System.out.println("До свидания!");
-                    return;
-                default:
-                    System.out.println("Неверный выбор. Повторите попытку.");
+    public void run() {
+        boolean exit = false;
+        while (!exit) {
+            printMenu();
+            System.out.print("Выберите действие: ");
+            String choice = scanner.nextLine();
+            switch (choice) {
+                case "1" -> passengerView.registerPassengerFromInput();
+                case "2" -> passengerView.findPassengerByPassportInput();
+                case "3" -> flightView.registerFlightInput();
+                case "4" -> flightView.findAvailableFlightsInput();
+                case "5" -> flightView.showAllFlights();
+                case "6" -> flightView.updateAvailableSeatsInput();
+                case "7" -> flightView.deleteFlightInput();
+                case "8" -> ticketView.bookTicketInput();
+                case "9" -> ticketView.cancelTicketInput();
+                case "10" -> ticketView.showTicketsByPassenger();
+                case "11" -> ticketView.showTicketsByStatus();
+                case "12" -> ticketView.showAllTickets();
+                case "0" -> {
+                    System.out.println("Выход из системы...");
+                    exit = true;
+                }
+                default -> System.out.println("Неверный выбор. Повторите попытку.");
             }
+            System.out.println();
         }
     }
 
-    private static void runPassengerMenu(PassengerView passengerView) {
-        System.out.println("\n--- Работа с пассажирами ---");
+    private void printMenu() {
+        System.out.println("=== СИСТЕМА БРОНИРОВАНИЯ БИЛЕТОВ ===");
         System.out.println("1. Зарегистрировать пассажира");
         System.out.println("2. Найти пассажира по паспорту");
-        System.out.print("Выберите действие: ");
-
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
-
-        switch (input) {
-            case "1":
-                passengerView.registerPassengerFromInput();
-                break;
-            case "2":
-                passengerView.findPassengerByPassportInput();
-                break;
-            default:
-                System.out.println("Неверный выбор.");
-        }
-    }
-
-    private static void runFlightMenu(FlightView flightView) {
-        System.out.println("\n--- Работа с рейсами ---");
-        System.out.println("1. Найти доступные рейсы");
-        System.out.println("2. Обновить количество доступных мест");
-        System.out.print("Выберите действие: ");
-
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
-
-        switch (input) {
-            case "1":
-                flightView.findAvailableFlightsInput();
-                break;
-            case "2":
-                flightView.updateAvailableSeatsInput();
-                break;
-            default:
-                System.out.println("Неверный выбор.");
-        }
-    }
-
-    private static void runTicketMenu(TicketView ticketView) {
-        System.out.println("\n--- Работа с билетами ---");
-        System.out.println("1. Забронировать билет");
-        System.out.println("2. Отменить билет");
-        System.out.println("3. Показать билеты пассажира");
-        System.out.print("Выберите действие: ");
-
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
-
-        switch (input) {
-            case "1":
-                ticketView.bookTicketInput();
-                break;
-            case "2":
-                ticketView.cancelTicketInput();
-                break;
-            case "3":
-                ticketView.showTicketsByPassengerInput();
-                break;
-            default:
-                System.out.println("Неверный выбор.");
-        }
+        System.out.println("3. Добавить рейс");
+        System.out.println("4. Найти доступные рейсы");
+        System.out.println("5. Показать все рейсы");
+        System.out.println("6. Обновить количество мест на рейсе");
+        System.out.println("7. Удалить рейс");
+        System.out.println("8. Оформить билет");
+        System.out.println("9. Отменить билет");
+        System.out.println("10. Показать билеты пассажира");
+        System.out.println("11. Показать билеты по статусу");
+        System.out.println("12. Показать все билеты");
+        System.out.println("0. Выход");
     }
 }

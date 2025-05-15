@@ -3,78 +3,121 @@ package com.example.booking.view;
 import com.example.booking.model.Flight;
 import com.example.booking.service.FlightService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
 
 /**
- * Класс, реализующий слой представления (View) для работы с рейсами.
- *
- * <p>Этот класс:
- * <ul>
- *     <li>Взаимодействует с пользователем через консоль (ввод/вывод)</li>
- *     <li>Передаёт запросы в {@link FlightService}</li>
- *     <li>Отображает результаты или сообщения об ошибках</li>
- * </ul>
- *
- * <p>Он не содержит бизнес-логики — только взаимодействие с пользователем.
- * Все проверки и действия происходят в сервисе.
+ * Класс представления для взаимодействия пользователя с данными о рейсах через консоль.
+ * <p>
+ * Использует {@link FlightService} для выполнения бизнес-операций и {@link Scanner} для чтения ввода пользователя.
  */
 public class FlightView {
 
     private final FlightService flightService;
     private final Scanner scanner;
 
-    /**
-     * Конструктор получает зависимости — сервис и сканер.
-     *
-     * @param flightService сервис, отвечающий за бизнес-логику рейсов
-     * @param scanner объект {@link Scanner} для чтения ввода пользователя
-     */
     public FlightView(FlightService flightService, Scanner scanner) {
         this.flightService = flightService;
         this.scanner = scanner;
     }
 
     /**
-     * Метод позволяет пользователю найти рейсы между двумя городами.
-     *
-     * <p><b>Что реализовать (пошагово):</b>
-     * <ol>
-     *     <li>Вывести: "Введите город отправления:"</li>
-     *     <li>Прочитать строку через {@code scanner.nextLine()}</li>
-     *     <li>Вывести: "Введите город прибытия:"</li>
-     *     <li>Прочитать строку</li>
-     *     <li>Вызвать метод {@code flightService.findAvailableFlights(departure, arrival)}</li>
-     *     <li>Если список пуст — вывести: "Доступных рейсов не найдено."</li>
-     *     <li>Если список не пуст — для каждого рейса вывести:
-     *         <ul>
-     *             <li>Номер рейса</li>
-     *             <li>Города</li>
-     *             <li>Дата и время</li>
-     *             <li>Количество доступных мест</li>
-     *         </ul>
-     *     </li>
-     * </ol>
+     * Обработка сценария "поиск доступных рейсов".
+     * Пользователь вводит города отправления и назначения, после чего отображаются найденные рейсы.
      */
     public void findAvailableFlightsInput() {
-        // реализация пишется по инструкции выше
+        System.out.print("Введите город отправления: ");
+        String from = scanner.nextLine();
+
+        System.out.print("Введите город прибытия: ");
+        String to = scanner.nextLine();
+
+        List<Flight> flights = flightService.findAvailableFlights(from, to);
+        if (flights.isEmpty()) {
+            System.out.println("Рейсы не найдены.");
+        } else {
+            System.out.println("Найденные рейсы:");
+            for (Flight flight : flights) {
+                System.out.println(flight);
+            }
+        }
     }
 
     /**
-     * Метод позволяет администратору обновить количество доступных мест на рейсе.
-     *
-     * <p><b>Что реализовать (пошагово):</b>
-     * <ol>
-     *     <li>Вывести: "Введите номер рейса:"</li>
-     *     <li>Прочитать строку (номер рейса)</li>
-     *     <li>Вывести: "Введите новое количество доступных мест:"</li>
-     *     <li>Прочитать строку и преобразовать её в число ({@code Integer.parseInt})</li>
-     *     <li>Вызвать {@code flightService.updateAvailableSeats(flightNumber, newSeats)}</li>
-     *     <li>Вывести: "Количество мест успешно обновлено." (если всё прошло без ошибок)</li>
-     *     <li>Если возникла ошибка (например, отрицательное число или рейс не найден) — вывести сообщение об ошибке</li>
-     * </ol>
+     * Обработка сценария "обновление количества доступных мест на рейсе".
+     * Пользователь вводит номер рейса и новое количество мест.
      */
     public void updateAvailableSeatsInput() {
-        // реализация пишется по инструкции выше
+        System.out.print("Введите номер рейса: ");
+        String flightNumber = scanner.nextLine();
+
+        System.out.print("Введите новое количество доступных мест: ");
+        int newSeats = Integer.parseInt(scanner.nextLine());
+
+        flightService.updateAvailableSeats(flightNumber, newSeats);
+        System.out.println("Места обновлены.");
+    }
+
+    /**
+     * Обработка сценария "регистрация нового рейса".
+     * Пользователь вводит все необходимые параметры.
+     */
+    public void registerFlightInput() {
+        System.out.print("Город отправления: ");
+        String from = scanner.nextLine();
+
+        System.out.print("Город прибытия: ");
+        String to = scanner.nextLine();
+
+        System.out.print("Дата и время отправления (пример: 2025-12-01T15:30): ");
+        String dateStr = scanner.nextLine();
+        LocalDateTime departureTime = LocalDateTime.parse(dateStr);
+
+        System.out.print("Продолжительность полёта (в минутах): ");
+        int duration = Integer.parseInt(scanner.nextLine());
+
+        System.out.print("Общее количество мест: ");
+        int total = Integer.parseInt(scanner.nextLine());
+
+        Flight flight = new Flight(to, from, departureTime, duration);
+        flight.setTotalSeats(total);
+        flight.setAvailableSeats(total);
+
+        boolean result = flightService.registerFlight(flight);
+        if (result) {
+            System.out.println("Рейс успешно добавлен.");
+        } else {
+            System.out.println("Не удалось добавить рейс (возможно, он уже существует).");
+        }
+    }
+
+    /**
+     * Обработка сценария "удаление рейса по номеру".
+     */
+    public void deleteFlightInput() {
+        System.out.print("Введите номер рейса для удаления: ");
+        String flightNumber = scanner.nextLine();
+
+        boolean deleted = flightService.deleteFlight(flightNumber);
+        if (deleted) {
+            System.out.println("Рейс успешно удалён.");
+        } else {
+            System.out.println("Рейс не найден или не удалось удалить.");
+        }
+    }
+
+    /**
+     * Показать все рейсы.
+     */
+    public void showAllFlights() {
+        List<Flight> flights = flightService.getAllFlights();
+        if (flights.isEmpty()) {
+            System.out.println("Нет зарегистрированных рейсов.");
+        } else {
+            for (Flight f : flights) {
+                System.out.println(f);
+            }
+        }
     }
 }

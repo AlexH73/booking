@@ -10,21 +10,21 @@ public class FlightRepositoryImpl implements FlightRepository {
     private List<Flight> flights = new ArrayList<>();
 
     @Override
-public Flight findByFlightNumber(String flightNumber) {
-    return flights.stream()
-        .filter(flight -> flight.getFlightNumber().equals(flightNumber))
-        .findFirst()
-        .orElse(null);
-}
+    public Flight findByFlightNumber(String flightNumber) {
+        return flights.stream()
+                .filter(flight -> flight.getFlightNumber().equals(flightNumber))
+                .findFirst()
+                .orElse(null);
+    }
 
     @Override
-public List<Flight> findAvailableFlights(String departureCity, String arrivalCity) {
-    return flights.stream()
-        .filter(flight -> flight.getDepartureCity().equals(departureCity)
-            && flight.getArrivalCity().equals(arrivalCity)
-            && flight.getAvailableSeats() > 0)
-        .collect(Collectors.toList());
-}
+    public List<Flight> findAvailableFlights(String departureCity, String arrivalCity) {
+        return flights.stream()
+                .filter(flight -> flight.getDepartureCity().equals(departureCity)
+                        && flight.getArrivalCity().equals(arrivalCity)
+                        && flight.getAvailableSeats() > 0)
+                .collect(Collectors.toList());
+    }
 
     @Override
     public void updateAvailableSeats(String flightNumber, int newAvailableSeats) {

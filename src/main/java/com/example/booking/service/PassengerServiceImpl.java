@@ -1,96 +1,94 @@
 package com.example.booking.service;
 
+import com.example.booking.exceptions.IncorrectPassangerDataException;
 import com.example.booking.model.Passenger;
 import com.example.booking.repository.PassengerRepository;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
- * Реализация бизнес-логики работы с пассажирами.
- *
- * <p>Отвечает за:
- * <ul>
- *     <li>Проверку корректности входных данных (валидация)</li>
- *     <li>Проверку уникальности пассажира по паспорту</li>
- *     <li>Создание и сохранение объекта в хранилище</li>
- * </ul>
- *
- * <p><b>Важно:</b> Вся логика обработки данных должна быть здесь.
- * Репозиторий должен использоваться только для хранения и извлечения данных, без принятия решений.
+ * Реализация интерфейса {@link PassengerService}.
+ * <p>
+ * Отвечает за регистрацию, поиск, обновление и удаление пассажиров,
+ * включая базовую валидацию входных данных.
  */
 public class PassengerServiceImpl implements PassengerService {
 
-    // Репозиторий, через который происходит работа с данными пассажиров
     private final PassengerRepository passengerRepository;
 
     /**
-     * Конструктор с внедрением зависимости.
+     * Конструктор принимает зависимость — репозиторий пассажиров.
      *
-     * <p>При создании объекта сервис должен получить экземпляр {@code PassengerRepository}.
-     * Это позволяет:
-     * <ul>
-     *     <li>Изолировать сервис от конкретной реализации хранилища</li>
-     *     <li>Легко писать тесты (можно подменить репозиторий на заглушку)</li>
-     * </ul>
-     *
-     * @param passengerRepository репозиторий для доступа к данным пассажиров
+     * @param passengerRepository хранилище пассажиров
      */
     public PassengerServiceImpl(PassengerRepository passengerRepository) {
         this.passengerRepository = passengerRepository;
     }
 
-    /**
-     * Регистрирует нового пассажира.
-     *
-     * <p><b>Шаги реализации:</b>
-     * <ol>
-     *     <li>Проверить, что объект {@code passenger} не {@code null}.</li>
-     *     <li>Проверить, что у него заполнены ключевые поля:
-     *         <ul>
-     *             <li>{@code name} — имя</li>
-     *             <li>{@code passport} — номер паспорта</li>
-     *             <li>{@code dateOfBirth} — дата рождения</li>
-     *         </ul>
-     *         Если что-то не указано — выбросить исключение или прервать выполнение.
-     *     </li>
-     *     <li>Проверить, существует ли уже пассажир с таким паспортом:
-     *         <ul>
-     *             <li>Вызвать {@code passengerRepository.findByPassport(passport)}</li>
-     *             <li>Если такой пассажир уже есть — регистрация невозможна, вернуть ошибку или прервать выполнение</li>
-     *         </ul>
-     *     </li>
-     *     <li>Если всё в порядке — вызвать {@code passengerRepository.save(passenger)}</li>
-     * </ol>
-     *
-     * <p>Вся логика должна быть реализована в этом методе. Репозиторий просто сохраняет объект без проверок.
-     *
-     * @param passenger объект нового пассажира
-     */
     @Override
-    public void registerPassenger(Passenger passenger) {
-        // реализация пишется по шагам выше
+    public boolean registerPassenger(Passenger passenger) {
+        if (passenger == null
+                || passenger.getName() == null || passenger.getName().isBlank()
+                || passenger.getPassportNumber() == null || passenger.getPassportNumber().isBlank()
+                || passenger.getDateOfBirth() == null) {
+            return false;
+        }
+
+        try {
+            Passenger existing = passengerRepository.findByPassport(passenger.getPassportNumber());
+            if (existing != null) {
+                return false; // Пассажир с таким паспортом уже существует
+            }
+            return passengerRepository.addPassenger(passenger);
+        } catch (IncorrectPassangerDataException e) {
+            System.err.println("Ошибка регистрации пассажира: " + e.getMessage());
+            return false;
+        }
     }
 
-    /**
-     * Находит пассажира по номеру паспорта.
-     *
-     * <p><b>Шаги реализации:</b>
-     * <ol>
-     *     <li>Проверить, что {@code passportNumber} не {@code null} и не пустой.</li>
-     *     <li>Вызвать метод {@code passengerRepository.findByPassport(passportNumber)}.</li>
-     *     <li>Вернуть результат:
-     *         <ul>
-     *             <li>{@code Passenger} — если найден</li>
-     *             <li>{@code null} — если не найден</li>
-     *         </ul>
-     *     </li>
-     * </ol>
-     *
-     * <p>Метод не должен бросать исключения, если пассажир не найден — это нормальная ситуация.
-     *
-     * @param passportNumber номер паспорта пассажира
-     * @return объект Passenger или null
-     */
     @Override
     public Passenger findPassengerByPassport(String passportNumber) {
-        return null; // реализацию студент должен написать сам
+        if (passportNumber == null || passportNumber.isBlank()) {
+            return null;
+        }
+        try {
+            return passengerRepository.findByPassport(passportNumber);
+        } catch (IncorrectPassangerDataException e) {
+            System.err.println("Ошибка поиска пассажира: " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public boolean deletePassenger(String passportNumber) {
+        if (passportNumber == null || passportNumber.isBlank()) {
+            return false;
+        }
+        try {
+            return passengerRepository.deleteByPassport(passportNumber);
+        } catch (IncorrectPassangerDataException e) {
+            System.err.println("Ошибка удаления пассажира: " + e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updatePassenger(Passenger passenger) {
+        if (passenger == null || passenger.getPassportNumber() == null || passenger.getPassportNumber().isBlank()) {
+            return false;
+        }
+        try {
+            return passengerRepository.update(passenger);
+        } catch (IncorrectPassangerDataException e) {
+            System.err.println("Ошибка обновления пассажира: " + e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public List<Passenger> getAllPassengers() {
+        List<Passenger> result = passengerRepository.findAll();
+        return result != null ? result : Collections.emptyList();
     }
 }

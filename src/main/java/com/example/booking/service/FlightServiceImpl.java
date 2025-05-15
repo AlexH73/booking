@@ -3,101 +3,79 @@ package com.example.booking.service;
 import com.example.booking.model.Flight;
 import com.example.booking.repository.FlightRepository;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Реализация интерфейса {@link FlightService}.
- *
- * <p>Класс отвечает за бизнес-логику, связанную с рейсами. Здесь принимаются все решения:
- * производится фильтрация, проверка входных данных (валидация), создаются или обновляются объекты.
- *
- * <p>Репозитории не должны выполнять логику, не должны проверять условия и не должны создавать или изменять объекты.
- * Это — задача сервисного слоя.
- *
- * <p>Реализация описана пошагово внутри методов.
+ * <p>
+ * Отвечает за бизнес-логику, связанную с рейсами: регистрацию, удаление,
+ * поиск по маршруту и обновление количества мест.
  */
 public class FlightServiceImpl implements FlightService {
 
-    // Зависимость, через которую происходит работа с данными рейсов
     private final FlightRepository flightRepository;
 
     /**
-     * Конструктор, принимающий зависимость.
+     * Конструктор принимает зависимость — репозиторий рейсов.
      *
-     * <p>Внедрение репозитория через конструктор делает класс гибким и удобным для тестирования.
-     * Репозиторий предоставляет доступ к данным, но не принимает решений.
-     *
-     * @param flightRepository хранилище рейсов
+     * @param flightRepository репозиторий рейсов
      */
     public FlightServiceImpl(FlightRepository flightRepository) {
         this.flightRepository = flightRepository;
     }
 
-    /**
-     * Находит рейсы между двумя городами, у которых есть доступные места.
-     *
-     * <p><b>Логика и шаги реализации:</b>
-     * <ol>
-     *     <li>Проверить, что оба параметра — {@code departureCity} и {@code arrivalCity} — не {@code null} и не пустые.
-     *         <ul>
-     *             <li>Если один из параметров невалиден — вернуть пустой список или выбросить исключение.</li>
-     *         </ul>
-     *     </li>
-     *     <li>Запросить из {@code flightRepository} все доступные рейсы (например, методом {@code findAll()}).</li>
-     *     <li>Создать новый список для подходящих рейсов.</li>
-     *     <li>Для каждого рейса выполнить следующие проверки:
-     *         <ul>
-     *             <li>город отправления совпадает с {@code departureCity} (игнорировать регистр — по желанию)</li>
-     *             <li>город прибытия совпадает с {@code arrivalCity}</li>
-     *             <li>количество доступных мест больше 0</li>
-     *         </ul>
-     *     </li>
-     *     <li>Если все условия соблюдены — добавить рейс в результирующий список.</li>
-     *     <li>После завершения цикла вернуть этот список (даже если он пуст).</li>
-     * </ol>
-     *
-     * <p><b>Важно:</b> ни одна из этих проверок не должна быть реализована в репозитории.
-     * Репозиторий только возвращает данные, вся логика принадлежит сервису.
-     *
-     * @param departureCity город отправления
-     * @param arrivalCity город прибытия
-     * @return список подходящих рейсов
-     */
     @Override
     public List<Flight> findAvailableFlights(String departureCity, String arrivalCity) {
-        return null; // реализация пишется по инструкции выше
+        if (departureCity == null || arrivalCity == null
+                || departureCity.isBlank() || arrivalCity.isBlank()) {
+            return Collections.emptyList();
+        }
+        return flightRepository.findAvailableFlights(departureCity, arrivalCity);
     }
 
-    /**
-     * Обновляет количество доступных мест на рейсе.
-     *
-     * <p><b>Логика и шаги реализации:</b>
-     * <ol>
-     *     <li>Проверить, что {@code flightNumber} не {@code null} и не пустой.</li>
-     *     <li>Проверить, что {@code newAvailableSeats} не отрицательное число.
-     *         <ul>
-     *             <li>Если число меньше 0 — выбросить исключение или игнорировать запрос.</li>
-     *         </ul>
-     *     </li>
-     *     <li>Найти рейс по номеру с помощью {@code flightRepository.findByFlightNumber()}.</li>
-     *     <li>Если рейс не найден — выбросить исключение или ничего не делать (в зависимости от бизнес-правил).</li>
-     *     <li>Если рейс найден:
-     *         <ul>
-     *             <li>Изменить значение доступных мест через сеттер.</li>
-     *             <li>Сохранить обновлённый объект в {@code flightRepository}.</li>
-     *         </ul>
-     *     </li>
-     * </ol>
-     *
-     * <p><b>Важно:</b> только сервис отвечает за корректность данных. Репозиторий ничего не валидирует.
-     * Только здесь можно отказать в сохранении или изменить данные.
-     *
-     * @param flightNumber номер рейса
-     * @param newAvailableSeats новое значение доступных мест
-     */
     @Override
     public void updateAvailableSeats(String flightNumber, int newAvailableSeats) {
-        // реализация пишется по инструкции выше
+        if (flightNumber == null || flightNumber.isBlank() || newAvailableSeats < 0) {
+            return;
+        }
+        flightRepository.updateAvailableSeats(flightNumber, newAvailableSeats);
+    }
+
+    @Override
+    public boolean registerFlight(Flight flight) {
+        if (flight == null || flight.getFlightNumber() == null || flight.getFlightNumber().isBlank()) {
+            return false;
+        }
+        Flight existing = flightRepository.findByFlightNumber(flight.getFlightNumber());
+        if (existing != null) {
+            return false; // рейс с таким номером уже есть
+        }
+        return flightRepository.addFlight(flight);
+    }
+
+    @Override
+    public boolean deleteFlight(String flightNumber) {
+        if (flightNumber == null || flightNumber.isBlank()) {
+            return false;
+        }
+        Flight existing = flightRepository.findByFlightNumber(flightNumber);
+        if (existing == null) {
+            return false;
+        }
+        return flightRepository.deleteFlight(existing);
+    }
+
+    @Override
+    public Flight findByFlightNumber(String flightNumber) {
+        if (flightNumber == null || flightNumber.isBlank()) {
+            return null;
+        }
+        return flightRepository.findByFlightNumber(flightNumber);
+    }
+
+    @Override
+    public List<Flight> getAllFlights() {
+        return flightRepository.findAvailableFlights("", ""); // если нужно — заменить на отдельный метод в репозитории
     }
 }

@@ -11,15 +11,15 @@ public class Passenger {
     private String email;
     private String phoneNumber;
 
-    public Passenger(String name, String passportNumber, LocalDate dateOfBirth , String email , String phoneNumber) {
+    public Passenger(String name,  LocalDate dateOfBirth , String email , String phoneNumber) {
         this.name = name;
-        this.passportNumber = passportNumber;
+        this.passportNumber = generatePassportNumber();
         this.dateOfBirth = dateOfBirth;
         this.email = email;
         this.phoneNumber = phoneNumber;
     }
 
-    public static String generatePassportNumber() {
+    private static String generatePassportNumber() {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         int length = 10;
         Random random = new Random();

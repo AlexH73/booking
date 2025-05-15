@@ -2,6 +2,8 @@ package com.example.booking.service;
 
 import com.example.booking.model.Passenger;
 
+import java.util.List;
+
 /**
  * Интерфейс бизнес-логики работы с пассажирами.
  *
@@ -16,7 +18,7 @@ import com.example.booking.model.Passenger;
  *     <li>Выдачу понятных сообщений об ошибках при недопустимых действиях.</li>
  * </ul>
  *
- * <p>Репозиторий — это просто хранилище. Только сервис отвечает за то, **как** и **при каких условиях** туда что-то передаётся.
+ * <p>Репозиторий — это просто хранилище. Только сервис отвечает за то, <b>как</b> и <b>при каких условиях</b> туда что-то передаётся.
  *
  * <p><b>Дополнительные методы, которые можно добавить:</b>
  * <ul>
@@ -44,11 +46,10 @@ public interface PassengerService {
      *     <li>Если такой пассажир уже есть — выбросить исключение или вернуть ошибку (на усмотрение).</li>
      * </ol>
      *
-     * <p>Вся проверка должна быть реализована в сервисе, а не в репозитории.
-     *
      * @param passenger объект с данными пассажира
+     * @return true, если регистрация прошла успешно, иначе false
      */
-    void registerPassenger(Passenger passenger);
+    boolean registerPassenger(Passenger passenger);
 
     /**
      * Ищет пассажира по номеру паспорта.
@@ -64,4 +65,44 @@ public interface PassengerService {
      * @return объект {@code Passenger} или {@code null}, если не найден
      */
     Passenger findPassengerByPassport(String passportNumber);
+
+    /**
+     * Удаляет пассажира по номеру паспорта.
+     *
+     * <p><b>Ожидаемая логика:</b>
+     * <ol>
+     *     <li>Проверить, что {@code passportNumber} не {@code null} и не пустой.</li>
+     *     <li>Вызвать {@code deleteByPassport()} у репозитория.</li>
+     *     <li>Вернуть true, если удаление успешно, иначе false.</li>
+     * </ol>
+     *
+     * @param passportNumber номер паспорта пассажира
+     * @return true, если удаление прошло успешно
+     */
+    boolean deletePassenger(String passportNumber);
+
+    /**
+     * Обновляет данные о пассажире.
+     *
+     * <p><b>Ожидаемая логика:</b>
+     * <ol>
+     *     <li>Проверить, что объект {@code passenger} не {@code null} и содержит валидный паспорт.</li>
+     *     <li>Убедиться, что такой пассажир существует в системе.</li>
+     *     <li>Вызвать метод {@code update()} у {@code PassengerRepository}.</li>
+     *     <li>Вернуть true, если обновление успешно.</li>
+     * </ol>
+     *
+     * @param passenger обновлённый объект пассажира
+     * @return true, если обновление прошло успешно
+     */
+    boolean updatePassenger(Passenger passenger);
+
+    /**
+     * Возвращает список всех зарегистрированных пассажиров.
+     *
+     * <p>Может использоваться для отображения всех записей в административном интерфейсе.</p>
+     *
+     * @return список пассажиров, может быть пустым
+     */
+    List<Passenger> getAllPassengers();
 }
