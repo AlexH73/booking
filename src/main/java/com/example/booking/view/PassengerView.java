@@ -63,7 +63,7 @@ public class PassengerView {
         System.out.println("Введите номер паспорта: ");
         String passportNumber = scanner.nextLine();
 
-        System.out.println("Введите дату рождения: (пример: 2025-12-01): ");
+        System.out.println("Введите дату рождения: (пример: yyyy-MM-dd): ");
         String bDate = scanner.nextLine();
         LocalDate birthDate = LocalDate.parse(bDate, FORMATTER);
 
@@ -109,10 +109,10 @@ public class PassengerView {
 
         Passenger passenger = passengerService.findPassengerByPassport(passNum);
         if (passenger != null) {
-            System.out.println("Пссажир: " + passenger.getName()
+            System.out.println("Пассажир: " + passenger.getName()
                     + " с номером паспорта: "
                     + passenger.getPassportNumber()
-                    + " дата родения: "
+                    + " дата рождения: "
                     + passenger.getDateOfBirth());
         } else {
             System.out.println("Пассажир не найден!");
