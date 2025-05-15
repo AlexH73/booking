@@ -144,4 +144,5 @@ public class PassengerView {
             System.out.println("Пассажир успешно обновлен: ");
         }
     }
+    // todo добавить метод вывода всех пассажиров.
 }
