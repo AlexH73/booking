@@ -5,6 +5,8 @@ import com.example.booking.service.PassengerService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -40,14 +42,21 @@ public class PassengerView {
         this.scanner = scanner;
     }
 
-    public Passenger creatPassenger() {
+    public Passenger creatеPassenger() {
 
         System.out.println("Введите имя нового пассажира: ");
         String name = scanner.nextLine();
 
-        System.out.println("Введите дату рождения: (пример: yyyy-MM-dd): ");
-        String bDate = scanner.nextLine();
-        LocalDate birthDate = LocalDate.parse(bDate, FORMATTER);
+        LocalDate birthDate = null;
+        while (birthDate == null) {
+            try {
+                System.out.println("Введите дату рождения (пример: yyyy-MM-dd): ");
+                String bDate = scanner.nextLine();
+                birthDate = LocalDate.parse(bDate, FORMATTER);
+            } catch (DateTimeParseException e) {
+                System.out.println("Ошибка формата даты! Используйте yyyy-MM-dd.");
+            }
+        }
 
         System.out.println("Введите E-Mail: ");
         String email = scanner.nextLine();
@@ -78,7 +87,7 @@ public class PassengerView {
      * </ol>
      */
     public void registerPassengerFromInput() {
-        Passenger passenger = creatPassenger();
+        Passenger passenger = creatеPassenger();
         boolean result = passengerService.registerPassenger(passenger);
         if (result) {
             System.out.println("Пассажир с номером паспорта " + passenger.getPassportNumber() + " успешно зарегистрирован.");
@@ -113,9 +122,13 @@ public class PassengerView {
 
         Passenger passenger = passengerService.findPassengerByPassport(passNum);
         if (passenger != null) {
-            System.out.println("Пассажир: " + passenger.getName());
-            System.out.println("Номер паспорта: " + passenger.getPassportNumber());
-            System.out.println("Дата рождения: " + passenger.getDateOfBirth());
+            System.out.printf(" Пассажир: %s " +
+                    "Номер паспорта: %s " +
+                    "Дата рождения: %s %n",
+                    passenger.getName(),
+                    passenger.getPassportNumber(),
+                    passenger.getDateOfBirth()
+            );
         } else {
             System.out.println("Пассажир не найден!");
         }
@@ -136,7 +149,7 @@ public class PassengerView {
         System.out.println("Введите номер паспорта: ");
         String passNum = scanner.nextLine();
 
-        Passenger passenger = creatPassenger();
+        Passenger passenger = creatеPassenger();
         passenger.setPassportNumber(passNum);
         boolean updatePassenger = passengerService.updatePassenger(passenger);
 
@@ -144,5 +157,16 @@ public class PassengerView {
             System.out.println("Пассажир успешно обновлен: ");
         }
     }
-    // todo добавить метод вывода всех пассажиров.
+    public void displayAllPassengers() {
+        List<Passenger> passengers = passengerService.getAllPassengers();
+        if (passengers.isEmpty()) {
+            System.out.println("Список пассажиров пуст.");
+            return;
+        }
+        System.out.println("Список всех пассажиров:");
+        passengers.forEach(p -> System.out.printf(
+                "Имя: %s | Паспорт: %s | Дата рождения: %s%n",
+                p.getName(), p.getPassportNumber(), p.getDateOfBirth()
+        ));
+    }
 }
