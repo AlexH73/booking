@@ -61,7 +61,9 @@ public class PassengerView {
         String name = scanner.nextLine();
 
         System.out.println("Введите номер паспорта: ");
+        //todo remove scanner call
         String passportNumber = scanner.nextLine();
+        // String passportNumber = passenger.getPassportNumber()
 
         System.out.println("Введите дату рождения: (пример: yyyy-MM-dd): ");
         String bDate = scanner.nextLine();
@@ -116,4 +118,6 @@ public class PassengerView {
             System.out.println("Пассажир не найден!");
         }
     }
+
+    //todo removePassangerMethod
 }
