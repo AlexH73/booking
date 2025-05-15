@@ -4,6 +4,7 @@ import com.example.booking.model.Flight;
 import com.example.booking.service.FlightService;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,6 +17,8 @@ public class FlightView {
 
     private final FlightService flightService;
     private final Scanner scanner;
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm");
+
 
     public FlightView(FlightService flightService, Scanner scanner) {
         this.flightService = flightService;
@@ -70,9 +73,9 @@ public class FlightView {
         System.out.print("Город прибытия: ");
         String to = scanner.nextLine();
 
-        System.out.print("Дата и время отправления (пример: 2025-12-01T15:30): ");
+        System.out.print("Дата и время отправления (пример: 2025-12-01_15:30): ");
         String dateStr = scanner.nextLine();
-        LocalDateTime departureTime = LocalDateTime.parse(dateStr);
+        LocalDateTime departureTime = LocalDateTime.parse(dateStr, FORMATTER);
 
         System.out.print("Продолжительность полёта (в минутах): ");
         int duration = Integer.parseInt(scanner.nextLine());
