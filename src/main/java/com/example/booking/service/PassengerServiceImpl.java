@@ -35,6 +35,10 @@ public class PassengerServiceImpl implements PassengerService {
             return false;
         }
 
+        // todo провести валидацию, что имя - это имя, почта введена корректно,
+        //  телефон содержит только цифры (использовать regex),
+        //  обработка даты рождения (избежать DateTimeException)
+
         try {
             Passenger existing = passengerRepository.findByPassport(passenger.getPassportNumber());
             if (existing != null) {
