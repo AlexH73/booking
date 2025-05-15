@@ -4,6 +4,7 @@ import com.example.booking.model.Passenger;
 import com.example.booking.service.PassengerService;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 /**
@@ -24,6 +25,7 @@ public class PassengerView {
 
     private final PassengerService passengerService;
     private final Scanner scanner;
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     /**
      * Конструктор получает сервис и сканер в качестве зависимостей.
@@ -55,7 +57,30 @@ public class PassengerView {
      * </ol>
      */
     public void registerPassengerFromInput() {
-        // TODO: Реализовать по инструкции выше
+        System.out.println("Введите имя нового пассажира: ");
+        String name = scanner.nextLine();
+
+        System.out.println("Введите номер паспорта: ");
+        String passportNumber = scanner.nextLine();
+
+        System.out.println("Введите дату рождения: (пример: 2025-12-01): ");
+        String bDate = scanner.nextLine();
+        LocalDate birthDate = LocalDate.parse(bDate, FORMATTER);
+
+        System.out.println("Введите E-Mail: ");
+        String email = scanner.nextLine();
+
+        System.out.println("Введите номер телефона:");
+        String phone = scanner.nextLine();
+
+        Passenger passenger = new Passenger(name, birthDate, email, phone);
+
+        boolean result = passengerService.registerPassenger(passenger);
+        if (result) {
+            System.out.println("Пассажир с номером паспорта " + passenger.getPassportNumber() + "успешно зарегистрирован.");
+        } else {
+            System.out.println("Не удалось добавить пассажира.");
+        }
     }
 
     /**
@@ -79,6 +104,18 @@ public class PassengerView {
      * </ol>
      */
     public void findPassengerByPassportInput() {
-        // TODO: Реализовать по инструкции выше
+        System.out.println("Введите номер паспорта: ");
+        String passNum = scanner.nextLine();
+
+        Passenger passenger = passengerService.findPassengerByPassport(passNum);
+        if (passenger != null) {
+            System.out.println("Пссажир: " + passenger.getName()
+                    + " с номером паспорта: "
+                    + passenger.getPassportNumber()
+                    + " дата родения: "
+                    + passenger.getDateOfBirth());
+        } else {
+            System.out.println("Пассажир не найден!");
+        }
     }
 }
