@@ -12,6 +12,8 @@ import java.util.Scanner;
  * Инициализирует все компоненты (репозитории, сервисы, представления) и запускает цикл обработки команд.
  */
 public class MainMenu {
+    // todo:
+    // переделать меню в подпункты с выпадашками, чтобы не было огромного меню
 
     private final PassengerView passengerView;
     private final FlightView flightView;
