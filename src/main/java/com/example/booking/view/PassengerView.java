@@ -77,7 +77,7 @@ public class PassengerView {
 
         boolean result = passengerService.registerPassenger(passenger);
         if (result) {
-            System.out.println("Пассажир с номером паспорта " + passenger.getPassportNumber() + "успешно зарегистрирован.");
+            System.out.println("Пассажир с номером паспорта " + passenger.getPassportNumber() + " успешно зарегистрирован.");
         } else {
             System.out.println("Не удалось добавить пассажира.");
         }
@@ -110,9 +110,9 @@ public class PassengerView {
         Passenger passenger = passengerService.findPassengerByPassport(passNum);
         if (passenger != null) {
             System.out.println("Пассажир: " + passenger.getName()
-                    + " с номером паспорта: "
+                    + "\n Номер паспорта: "
                     + passenger.getPassportNumber()
-                    + " дата рождения: "
+                    + "\n Дата рождения: "
                     + passenger.getDateOfBirth());
         } else {
             System.out.println("Пассажир не найден!");
