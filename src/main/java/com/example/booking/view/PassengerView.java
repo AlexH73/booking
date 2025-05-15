@@ -119,5 +119,15 @@ public class PassengerView {
         }
     }
 
+    public void deletePassengerByPassportInput() {
+        System.out.println("Введите номер паспорта: ");
+        String passNum = scanner.nextLine();
+
+        boolean dellPassenger = passengerService.deletePassenger(passNum);
+
+        if (dellPassenger) {
+            System.out.println("Пассажир успешно удален.");
+        }
+    }
     //todo removePassangerMethod
 }
