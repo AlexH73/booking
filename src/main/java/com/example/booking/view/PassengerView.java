@@ -54,7 +54,7 @@ public class PassengerView {
                 String bDate = scanner.nextLine();
                 birthDate = LocalDate.parse(bDate, FORMATTER);
             } catch (DateTimeParseException e) {
-                System.out.println("Ошибка формата даты! Используйте yyyy-MM-dd.");
+                System.out.println(ConsoleColor.RED.apply("Ошибка формата даты! Используйте формат: yyyy-MM-dd."));
             }
         }
 
@@ -90,9 +90,9 @@ public class PassengerView {
         Passenger passenger = creatеPassenger();
         boolean result = passengerService.registerPassenger(passenger);
         if (result) {
-            System.out.println("Пассажир с номером паспорта " + passenger.getPassportNumber() + " успешно зарегистрирован.");
+            System.out.println(ConsoleColor.GREEN.apply("Пассажир с номером паспорта " + passenger.getPassportNumber() + " успешно зарегистрирован."));
         } else {
-            System.out.println("Не удалось добавить пассажира.");
+            System.out.println(ConsoleColor.RED.apply("Не удалось добавить пассажира."));
         }
     }
 
@@ -122,15 +122,15 @@ public class PassengerView {
 
         Passenger passenger = passengerService.findPassengerByPassport(passNum);
         if (passenger != null) {
-            System.out.printf(" Пассажир: %s " +
-                    "Номер паспорта: %s " +
-                    "Дата рождения: %s %n",
+            System.out.printf(ConsoleColor.GREEN.apply(" Пассажир: %s " +
+                    "\n Номер паспорта: %s " +
+                    "\n Дата рождения: %s %n"),
                     passenger.getName(),
                     passenger.getPassportNumber(),
                     passenger.getDateOfBirth()
             );
         } else {
-            System.out.println("Пассажир не найден!");
+            System.out.println(ConsoleColor.RED.apply("Пассажир не найден!"));
         }
     }
 
@@ -141,7 +141,7 @@ public class PassengerView {
         boolean dellPassenger = passengerService.deletePassenger(passNum);
 
         if (dellPassenger) {
-            System.out.println("Пассажир успешно удален.");
+            System.out.println(ConsoleColor.GREEN.apply("Пассажир успешно удален."));
         }
     }
 
@@ -154,18 +154,18 @@ public class PassengerView {
         boolean updatePassenger = passengerService.updatePassenger(passenger);
 
         if (updatePassenger) {
-            System.out.println("Пассажир успешно обновлен: ");
+            System.out.println(ConsoleColor.GREEN.apply("Пассажир успешно обновлен: "));
         }
     }
     public void displayAllPassengers() {
         List<Passenger> passengers = passengerService.getAllPassengers();
         if (passengers.isEmpty()) {
-            System.out.println("Список пассажиров пуст.");
+            System.out.println(ConsoleColor.YELLOW.apply("Список пассажиров пуст."));
             return;
         }
         System.out.println("Список всех пассажиров:");
-        passengers.forEach(p -> System.out.printf(
-                "Имя: %s | Паспорт: %s | Дата рождения: %s%n",
+        passengers.forEach(p -> System.out.printf(ConsoleColor.BLUE.apply(
+                "Имя: %s | Паспорт: %s | Дата рождения: %s%n"),
                 p.getName(), p.getPassportNumber(), p.getDateOfBirth()
         ));
     }
