@@ -109,11 +109,9 @@ public class PassengerView {
 
         Passenger passenger = passengerService.findPassengerByPassport(passNum);
         if (passenger != null) {
-            System.out.println("Пассажир: " + passenger.getName()
-                    + "\n Номер паспорта: "
-                    + passenger.getPassportNumber()
-                    + "\n Дата рождения: "
-                    + passenger.getDateOfBirth());
+            System.out.print("Пассажир: " + passenger.getName());
+            System.out.print("Номер паспорта: " + passenger.getPassportNumber());
+            System.out.print("Дата рождения: " + passenger.getDateOfBirth());
         } else {
             System.out.println("Пассажир не найден!");
         }
