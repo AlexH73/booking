@@ -25,6 +25,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
+import java.util.regex.Pattern;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class PassengerView {
 
@@ -41,7 +48,40 @@ public class PassengerView {
         System.out.print(message);
         return scanner.nextLine().trim();
     }
-    public LocalDate getValidBirthDate() {
+
+    private String getValidName() {
+        while (true) {
+            String name = getUserInput("Введите имя нового пассажира: ");
+            if (name.matches("^[A-Za-zА-Яа-яЁё\\s-]+$")) { // Erlaubt Buchstaben, Leerzeichen und Bindestriche
+                return name;
+            }
+            System.out.println("Ошибка: Некорректное имя. Используйте только буквы и пробелы.");
+        }
+    }
+
+    private String getValidEmail() {
+        Pattern emailPattern = Pattern.compile("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$"); // Einfache E-Mail-Validierung
+        while (true) {
+            String email = getUserInput("Введите E-Mail: ");
+            if (emailPattern.matcher(email).matches()) {
+                return email;
+            }
+            System.out.println("Ошибка: Некорректный адрес электронной почты. Попробуйте снова.");
+        }
+    }
+
+    private String getValidPhone() {
+        Pattern phonePattern = Pattern.compile("^\\+?[0-9\\s-]{7,15}$"); // Erlaubt Zahlen, Leerzeichen und Bindestriche
+        while (true) {
+            String phone = getUserInput("Введите номер телефона: ");
+            if (phonePattern.matcher(phone).matches()) {
+                return phone;
+            }
+            System.out.println("Ошибка: Некорректный номер телефона. Попробуйте снова.");
+        }
+    }
+
+    private LocalDate getValidBirthDate() {
         while (true) {
             String birthDateStr = getUserInput("Введите дату рождения (пример: yyyy-MM-dd): ");
             try {
@@ -49,7 +89,7 @@ public class PassengerView {
                 if (birthDate.isAfter(LocalDate.now())) {
                     System.out.println("Ошибка: Дата рождения не может быть в будущем. Попробуйте снова.");
                 } else {
-                    return birthDate; // Korrekte Eingabe
+                    return birthDate;
                 }
             } catch (DateTimeParseException e) {
                 System.out.println("Ошибка: Некорректный формат даты. Попробуйте снова (пример: yyyy-MM-dd).");
@@ -57,20 +97,18 @@ public class PassengerView {
         }
     }
 
-
     public String registerPassengerFromInput() {
-        String name = getUserInput("Введите имя нового пассажира: ");
+        String name = getValidName();
         String passportNumber = getUserInput("Введите номер паспорта: ");
-        LocalDate birthDate = getValidBirthDate(); // Verwendet die neue Methode
-
-        String email = getUserInput("Введите E-Mail: ");
-        String phone = getUserInput("Введите номер телефона: ");
+        LocalDate birthDate = getValidBirthDate();
+        String email = getValidEmail();
+        String phone = getValidPhone();
 
         Passenger passenger = new Passenger(name, birthDate, email, phone);
 
         boolean result = passengerService.registerPassenger(passenger);
         return result
-                ? "Пассажир с номером паспорта " + passenger.getPassportNumber() + " успешно зарегистрирован."
+                ? "Пассажир с номером паспорта " + passportNumber + " успешно зарегистрирован."
                 : "Ошибка: Не удалось добавить пассажира.";
     }
 
@@ -85,3 +123,4 @@ public class PassengerView {
                 : "Ошибка: Пассажир не найден.";
     }
 }
+
