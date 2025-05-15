@@ -40,6 +40,27 @@ public class PassengerView {
         this.scanner = scanner;
     }
 
+    public Passenger creatPassenger() {
+
+        System.out.println("Введите имя нового пассажира: ");
+        String name = scanner.nextLine();
+
+        System.out.println("Введите дату рождения: (пример: yyyy-MM-dd): ");
+        String bDate = scanner.nextLine();
+        LocalDate birthDate = LocalDate.parse(bDate, FORMATTER);
+
+        System.out.println("Введите E-Mail: ");
+        String email = scanner.nextLine();
+
+        System.out.println("Введите номер телефона:");
+        String phone = scanner.nextLine();
+
+
+        Passenger passenger = new Passenger(name, birthDate, email, phone);
+
+        return passenger;
+    }
+
     /**
      * Метод для регистрации нового пассажира.
      *
@@ -57,26 +78,7 @@ public class PassengerView {
      * </ol>
      */
     public void registerPassengerFromInput() {
-        System.out.println("Введите имя нового пассажира: ");
-        String name = scanner.nextLine();
-
-        System.out.println("Введите номер паспорта: ");
-        //todo remove scanner call
-        String passportNumber = scanner.nextLine();
-        // String passportNumber = passenger.getPassportNumber()
-
-        System.out.println("Введите дату рождения: (пример: yyyy-MM-dd): ");
-        String bDate = scanner.nextLine();
-        LocalDate birthDate = LocalDate.parse(bDate, FORMATTER);
-
-        System.out.println("Введите E-Mail: ");
-        String email = scanner.nextLine();
-
-        System.out.println("Введите номер телефона:");
-        String phone = scanner.nextLine();
-
-        Passenger passenger = new Passenger(name, birthDate, email, phone);
-
+        Passenger passenger = creatPassenger();
         boolean result = passengerService.registerPassenger(passenger);
         if (result) {
             System.out.println("Пассажир с номером паспорта " + passenger.getPassportNumber() + " успешно зарегистрирован.");
@@ -129,5 +131,17 @@ public class PassengerView {
             System.out.println("Пассажир успешно удален.");
         }
     }
-    //todo removePassangerMethod
+
+    public void updatePassengerByPassportInput() {
+        System.out.println("Введите номер паспорта: ");
+        String passNum = scanner.nextLine();
+
+        Passenger passenger = creatPassenger();
+        passenger.setPassportNumber(passNum);
+        boolean updatePassenger = passengerService.updatePassenger(passenger);
+
+        if (updatePassenger) {
+            System.out.println("Пассажир успешно обновлен: ");
+        }
+    }
 }

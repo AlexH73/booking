@@ -69,6 +69,8 @@ public class MainMenu {
                 case "10" -> ticketView.showTicketsByPassenger();
                 case "11" -> ticketView.showTicketsByStatus();
                 case "12" -> ticketView.showAllTickets();
+                case "13" -> passengerView.updatePassengerByPassportInput();
+                case "14" -> passengerView.deletePassengerByPassportInput();
                 case "0" -> {
                     System.out.println("Выход из системы...");
                     exit = true;
@@ -93,6 +95,8 @@ public class MainMenu {
         System.out.println("10. Показать билеты пассажира");
         System.out.println("11. Показать билеты по статусу");
         System.out.println("12. Показать все билеты");
+        System.out.println("13. Обновить пассажира по номеру паспорта");
+        System.out.println("14. Удалить пассажира по номеру паспорта");
         System.out.println("0. Выход");
     }
 }

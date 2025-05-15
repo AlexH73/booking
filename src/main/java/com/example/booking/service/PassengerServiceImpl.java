@@ -28,16 +28,16 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     public boolean registerPassenger(Passenger passenger) {
+        if (!isValid(passenger)) {
+            return false;
+        }
+
         if (passenger == null
                 || passenger.getName() == null || passenger.getName().isBlank()
                 || passenger.getPassportNumber() == null || passenger.getPassportNumber().isBlank()
                 || passenger.getDateOfBirth() == null) {
             return false;
         }
-
-        // todo провести валидацию, что имя - это имя, почта введена корректно,
-        //  телефон содержит только цифры (использовать regex),
-        //  обработка даты рождения (избежать DateTimeException)
 
         try {
             Passenger existing = passengerRepository.findByPassport(passenger.getPassportNumber());
@@ -79,6 +79,10 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     public boolean updatePassenger(Passenger passenger) {
+        if (!isValid(passenger)) {
+            return false;
+        }
+
         if (passenger == null || passenger.getPassportNumber() == null || passenger.getPassportNumber().isBlank()) {
             return false;
         }
@@ -95,4 +99,13 @@ public class PassengerServiceImpl implements PassengerService {
         List<Passenger> result = passengerRepository.findAll();
         return result != null ? result : Collections.emptyList();
     }
+
+    public boolean isValid(Passenger passenger) {
+        // todo сделать метод валидации
+        // todo провести валидацию, что имя - это имя, почта введена корректно,
+        //  телефон содержит только цифры (использовать regex),
+        //  обработка даты рождения (избежать DateTimeException)
+        return true;
+    }
+
 }
