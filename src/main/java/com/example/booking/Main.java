@@ -2,8 +2,8 @@ package com.example.booking;
 
 import com.example.booking.repository.*;
 import com.example.booking.service.*;
-import com.example.booking.view.*;
-import com.example.booking.view.console.*;
+import com.example.booking.views.*;
+import com.example.booking.views.console.*;
 
 import java.util.Scanner;
 

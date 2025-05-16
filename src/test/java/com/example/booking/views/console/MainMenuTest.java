@@ -1,4 +1,4 @@
-package com.example.booking.view.console;
+package com.example.booking.views.console;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

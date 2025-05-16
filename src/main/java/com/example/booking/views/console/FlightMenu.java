@@ -1,6 +1,6 @@
-package com.example.booking.view.console;
+package com.example.booking.views.console;
 
-import com.example.booking.view.FlightView;
+import com.example.booking.views.FlightView;
 
 import java.util.Scanner;
 

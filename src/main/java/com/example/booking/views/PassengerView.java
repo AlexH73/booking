@@ -1,8 +1,7 @@
-package com.example.booking.view;
+package com.example.booking.views;
 
 import com.example.booking.model.Passenger;
 import com.example.booking.service.PassengerService;
-import com.example.booking.service.PassengerServiceImpl;
 import com.example.booking.utils.ValidationUtils;
 
 import java.time.LocalDate;

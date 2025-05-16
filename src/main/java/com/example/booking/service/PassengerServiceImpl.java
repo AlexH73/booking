@@ -4,7 +4,7 @@ import com.example.booking.exceptions.IncorrectPassengerDataException;
 import com.example.booking.model.Passenger;
 import com.example.booking.repository.PassengerRepository;
 import com.example.booking.utils.ValidationUtils;
-import com.example.booking.view.ConsoleColor;
+import com.example.booking.views.ConsoleColor;
 
 
 import java.util.Collections;

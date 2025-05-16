@@ -2,19 +2,15 @@ package com.example.booking;
 
 import com.example.booking.repository.*;
 import com.example.booking.service.*;
-import com.example.booking.view.*;
-import com.example.booking.view.console.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class MainTest {

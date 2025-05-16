@@ -53,9 +53,13 @@ booking/
 │   │       └── com/
 │   │           └── example/
 │   │               └── booking/
+│   │                   ├── exceptions/
 │   │                   ├── model/
 │   │                   ├── repository/
-│   │                   └── service/
+│   │                   ├── service/
+│   │                   ├── utils/
+│   │                   └── views/
+│   │                       └── console/
 │   └── test/
 │       └── java/
 │           └── com/
@@ -63,7 +67,10 @@ booking/
 │                   └── booking/
 │                       ├── model/
 │                       ├── repository/
-│                       └── service/
+│                       ├──service/
+│                       ├── utils/
+│                       └── views/
+│                           └── console/
 ├── pom.xml
 └── README.md
 ```
