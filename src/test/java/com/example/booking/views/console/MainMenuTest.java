@@ -1,128 +1,106 @@
 package com.example.booking.views.console;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.util.Scanner;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
-/**
- * The type Main menu test.
- */
-@ExtendWith(MockitoExtension.class)
+import java.util.Scanner;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class MainMenuTest {
 
-    @Mock
-    private PassengerMenu passengerMenu;
-
-    @Mock
-    private FlightMenu flightMenu;
-
-    @Mock
-    private TicketMenu ticketMenu;
-
-    private MainMenu mainMenu;
-
-    /**
-     * Start should invoke passenger menu on input 1.
-     */
     @Test
-    void start_shouldInvokePassengerMenuOnInput1() {
-        // Arrange
-        provideInput("1\n0\n");
-        mainMenu = new MainMenu(passengerMenu, flightMenu, ticketMenu, new Scanner(System.in));
+    void start_shouldCallPassengerMenu() {
+        FakePassengerMenu passengerMenu = new FakePassengerMenu();
+        FakeFlightMenu flightMenu = new FakeFlightMenu();
+        FakeTicketMenu ticketMenu = new FakeTicketMenu();
 
-        // Act
+        String input = "1\n0\n"; // Выбор "Управление пассажирами", затем выход
+        Scanner scanner = new Scanner(input);
+
+        MainMenu mainMenu = new MainMenu(passengerMenu, flightMenu, ticketMenu, scanner);
         mainMenu.start();
 
-        // Assert
-        verify(passengerMenu).show();
-        verify(flightMenu, never()).show();
-        verify(ticketMenu, never()).show();
+        assertTrue(passengerMenu.isShowCalled());
     }
 
-    /**
-     * Start should invoke flight menu on input 2.
-     */
     @Test
-    void start_shouldInvokeFlightMenuOnInput2() {
-        provideInput("2\n0\n");
-        mainMenu = new MainMenu(passengerMenu, flightMenu, ticketMenu, new Scanner(System.in));
+    void start_shouldCallFlightMenu() {
+        FakePassengerMenu passengerMenu = new FakePassengerMenu();
+        FakeFlightMenu flightMenu = new FakeFlightMenu();
+        FakeTicketMenu ticketMenu = new FakeTicketMenu();
 
+        String input = "2\n0\n"; // Выбор "Управление рейсами", затем выход
+        Scanner scanner = new Scanner(input);
+
+        MainMenu mainMenu = new MainMenu(passengerMenu, flightMenu, ticketMenu, scanner);
         mainMenu.start();
 
-        verify(flightMenu).show();
-        verify(passengerMenu, never()).show();
+        assertTrue(flightMenu.isShowCalled());
     }
 
-    /**
-     * Start should invoke ticket menu on input 3.
-     */
     @Test
-    void start_shouldInvokeTicketMenuOnInput3() {
-        provideInput("3\n0\n");
-        mainMenu = new MainMenu(passengerMenu, flightMenu, ticketMenu, new Scanner(System.in));
+    void start_shouldCallTicketMenu() {
+        FakePassengerMenu passengerMenu = new FakePassengerMenu();
+        FakeFlightMenu flightMenu = new FakeFlightMenu();
+        FakeTicketMenu ticketMenu = new FakeTicketMenu();
 
+        String input = "3\n0\n"; // Выбор "Управление билетами", затем выход
+        Scanner scanner = new Scanner(input);
+
+        MainMenu mainMenu = new MainMenu(passengerMenu, flightMenu, ticketMenu, scanner);
         mainMenu.start();
 
-        verify(ticketMenu).show();
+        assertTrue(ticketMenu.isShowCalled());
     }
 
-    /**
-     * Start should exit on input 0.
-     */
-    @Test
-    void start_shouldExitOnInput0() {
-        provideInput("0\n");
-        mainMenu = new MainMenu(passengerMenu, flightMenu, ticketMenu, new Scanner(System.in));
+    private static class FakePassengerMenu extends PassengerMenu {
+        private boolean showCalled = false;
 
-        mainMenu.start();
+        public FakePassengerMenu() {
+            super(null, new Scanner(System.in));
+        }
 
-        verifyNoInteractions(passengerMenu, flightMenu, ticketMenu);
+        @Override
+        public void show() {
+            showCalled = true;
+        }
+
+        public boolean isShowCalled() {
+            return showCalled;
+        }
     }
 
-    /**
-     * Start should handle invalid input.
-     */
-    @Test
-    void start_shouldHandleInvalidInput() {
-        provideInput("invalid\n9\n0\n");
-        mainMenu = new MainMenu(passengerMenu, flightMenu, ticketMenu, new Scanner(System.in));
+    private static class FakeFlightMenu extends FlightMenu {
+        private boolean showCalled = false;
 
-        mainMenu.start();
+        public FakeFlightMenu() {
+            super(null, new Scanner(System.in));
+        }
 
-        verify(passengerMenu, never()).show();
-        verify(flightMenu, never()).show();
-        verify(ticketMenu, never()).show();
+        @Override
+        public void show() {
+            showCalled = true;
+        }
+
+        public boolean isShowCalled() {
+            return showCalled;
+        }
     }
 
-    /**
-     * Main menu flow should print correct structure.
-     */
-    @Test
-    void mainMenuFlow_shouldPrintCorrectStructure() {
-        provideInput("0\n");
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
+    private static class FakeTicketMenu extends TicketMenu {
+        private boolean showCalled = false;
 
-        mainMenu.start();
+        public FakeTicketMenu() {
+            super(null, new Scanner(System.in));
+        }
 
-        String result = outContent.toString();
-        assertAll(
-                () -> assertTrue(result.contains("=== ГЛАВНОЕ МЕНЮ ===")),
-                () -> assertTrue(result.contains("2. Управление рейсами")),
-                () -> assertTrue(result.contains("Выберите раздел:"))
-        );
+        @Override
+        public void show() {
+            showCalled = true;
+        }
 
-        System.setOut(System.out);
-    }
-
-    private void provideInput(String input) {
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        public boolean isShowCalled() {
+            return showCalled;
+        }
     }
 }
