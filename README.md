@@ -1,40 +1,40 @@
-# 🎫 Система бронирования билетов
+# 🎫 Ticket Booking System
 
-**Описание:**
+**Description:**
 
-Проект представляет собой многослойную архитектуру системы бронирования билетов на рейсы. Он включает в себя модели, репозитории и сервисы, разделённые по слоям, что обеспечивает модульность и удобство поддержки кода.
-
----
-
-## 🧱 Структура проекта
-
-* **Модели (Model):** Классы, представляющие основные сущности системы: `Ticket`, `Passenger`, `Flight`.
-* **Репозитории (Repository):** Интерфейсы для доступа к данным, такие как `TicketRepository`, `PassengerRepository`, `FlightRepository`.
-* **Сервисы (Service):** Интерфейсы, определяющие бизнес-логику приложения: `BookingService`, `FlightService`, `PassengerService`.
+The project is a multi-layered architecture for a flight ticket booking system. It includes models, repositories, and services divided into separate layers, ensuring code modularity and maintainability.
 
 ---
 
-## 🔧 Технологии
+## 🧱 Project Structure
 
-* Java 8 и выше
-* Maven для управления зависимостями и сборки проекта
-* Структура проекта соответствует стандартам Maven
+* **Models:** Classes representing core system entities: `Ticket`, `Passenger`, `Flight`.
+* **Repositories:** Data access interfaces such as `TicketRepository`, `PassengerRepository`, `FlightRepository`.
+* **Services:** Interfaces defining business logic: `BookingService`, `FlightService`, `PassengerService`.
 
 ---
 
-## 🚀 Запуск проекта
+## 🔧 Technologies
 
-1. Клонируйте репозиторий:
+* Java 8 and above
+* Maven for dependency management and project builds
+* Project structure follows Maven standards
+
+---
+
+## 🚀 Running the Project
+
+1. Clone the repository:
 
    ```bash
    git clone https://github.com/AlexH73/booking_final_project_57_1.git
    ```
-2. Перейдите в директорию проекта:
+2. Navigate to the project directory:
 
    ```bash
    cd booking
    ```
-3. Соберите проект с помощью Maven:
+3. Build the project using Maven:
 
    ```bash
    mvn clean install
@@ -42,10 +42,9 @@
 
 ---
 
-## 📁 Структура каталогов
+## 📁 Directory Structure
 
 ```
-
 booking/
 ├── src/
 │   ├── main/
@@ -67,7 +66,7 @@ booking/
 │                   └── booking/
 │                       ├── model/
 │                       ├── repository/
-│                       ├──service/
+│                       ├── service/
 │                       ├── utils/
 │                       └── views/
 │                           └── console/
@@ -75,18 +74,14 @@ booking/
 └── README.md
 ```
 
-
-
 ---
 
-## 👥 Авторы и разработчики
+## 👥 Authors and Developers
 
-* **Автор проекта:**
-
+* **Project Author:**
     * [iliasM-1733](https://github.com/iliasM-1733)
 
-* **Разработчики:**
-
+* **Developers:**
     * [AlexH73](https://github.com/AlexH73)
     * [Gott-II](https://github.com/Gott-II)
     * [irisyoga](https://github.com/irisyoga)
@@ -96,18 +91,18 @@ booking/
 
 ---
 
-## 🤝 Присоединяйтесь к проекту
+## 🤝 Contribute to the Project
 
-Мы приветствуем вклад сообщества в развитие проекта. Если у вас есть предложения, улучшения или исправления, пожалуйста:
+We welcome community contributions! To propose improvements, fixes, or new features:
 
-1. Откройте [Issue](https://github.com/AlexH73/booking_final_project_57_1/issues) для обсуждения изменений.
-2. Создайте форк репозитория и внесите необходимые изменения.
-3. Отправьте [Pull Request](https://github.com/AlexH73/booking_final_project_57_1/pulls) для рассмотрения и объединения ваших изменений.
+1. Open an [Issue](https://github.com/AlexH73/booking_final_project_57_1/issues) to discuss your changes.
+2. Fork the repository and implement your modifications.
+3. Submit a [Pull Request](https://github.com/AlexH73/booking_final_project_57_1/pulls) for review.
 
-Ваш вклад поможет сделать проект лучше!
+Your contributions will help make this project even better!
 
 ---
 
-## 📄 Лицензия
+## 📄 License
 
-Этот проект лицензируется под лицензией [MIT](https://github.com/AlexH73/booking_final_project_57_1?tab=MIT-1-ov-file).
+This project is licensed under the [MIT License](https://github.com/AlexH73/booking_final_project_57_1?tab=MIT-1-ov-file).
