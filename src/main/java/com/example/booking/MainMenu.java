@@ -61,16 +61,17 @@ public class MainMenu {
                 case "2" -> passengerView.findPassengerByPassportInput();
                 case "3" -> passengerView.updatePassengerByPassportInput();
                 case "4" -> passengerView.deletePassengerByPassportInput();
-                case "5" -> flightView.registerFlightInput();
-                case "6" -> flightView.findAvailableFlightsInput();
-                case "7" -> flightView.showAllFlights();
-                case "8" -> flightView.updateAvailableSeatsInput();
-                case "9" -> flightView.deleteFlightInput();
-                case "10" -> ticketView.bookTicketInput();
-                case "11" -> ticketView.cancelTicketInput();
-                case "12" -> ticketView.showTicketsByPassenger();
-                case "13" -> ticketView.showTicketsByStatus();
-                case "14" -> ticketView.showAllTickets();
+                case "5" -> passengerView.displayAllPassengers();
+                case "6" -> flightView.registerFlightInput();
+                case "7" -> flightView.findAvailableFlightsInput();
+                case "8" -> flightView.showAllFlights();
+                case "9" -> flightView.updateAvailableSeatsInput();
+                case "10" -> flightView.deleteFlightInput();
+                case "11" -> ticketView.bookTicketInput();
+                case "12" -> ticketView.cancelTicketInput();
+                case "13" -> ticketView.showTicketsByPassenger();
+                case "14" -> ticketView.showTicketsByStatus();
+                case "15" -> ticketView.showAllTickets();
                 case "0" -> {
                     System.out.println("Выход из системы...");
                     exit = true;
@@ -87,16 +88,17 @@ public class MainMenu {
         System.out.println("2. Найти пассажира по паспорту");
         System.out.println("3. Обновить пассажира по номеру паспорта");
         System.out.println("4. Удалить пассажира по номеру паспорта");
-        System.out.println("5. Добавить рейс");
-        System.out.println("6. Найти доступные рейсы");
-        System.out.println("7. Показать все рейсы");
-        System.out.println("8. Обновить количество мест на рейсе");
-        System.out.println("9. Удалить рейс");
-        System.out.println("10. Оформить билет");
-        System.out.println("11. Отменить билет");
-        System.out.println("12. Показать билеты пассажира");
-        System.out.println("13. Показать билеты по статусу");
-        System.out.println("14. Показать все билеты");
+        System.out.println("5. Показать список всех пассажиров");
+        System.out.println("6. Добавить рейс");
+        System.out.println("7. Найти доступные рейсы");
+        System.out.println("8. Показать все рейсы");
+        System.out.println("9. Обновить количество мест на рейсе");
+        System.out.println("10. Удалить рейс");
+        System.out.println("11. Оформить билет");
+        System.out.println("12. Отменить билет");
+        System.out.println("13. Показать билеты пассажира");
+        System.out.println("14. Показать билеты по статусу");
+        System.out.println("15. Показать все билеты");
         System.out.println("0. Выход");
     }
 }

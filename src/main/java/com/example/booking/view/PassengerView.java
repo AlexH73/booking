@@ -2,6 +2,8 @@ package com.example.booking.view;
 
 import com.example.booking.model.Passenger;
 import com.example.booking.service.PassengerService;
+import com.example.booking.service.PassengerServiceImpl;
+import com.example.booking.utils.ValidationUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -27,7 +29,8 @@ public class PassengerView {
 
     private final PassengerService passengerService;
     private final Scanner scanner;
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final String DATE_PATTERN = "yyyy-MM-dd";
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(DATE_PATTERN);
 
     /**
      * Конструктор получает сервис и сканер в качестве зависимостей.
@@ -43,31 +46,62 @@ public class PassengerView {
     }
 
     public Passenger creatеPassenger() {
+        String name = inputValidName();
+        LocalDate birthDate = inputValidBirthDate();
+        String email = inputValidEmail();
+        String phone = inputValidPhone();
 
-        System.out.println("Введите имя нового пассажира: ");
-        String name = scanner.nextLine();
+        return new Passenger(name, birthDate, email, phone);
+    }
 
-        LocalDate birthDate = null;
-        while (birthDate == null) {
+    // Вспомогательные методы валидации
+    private String inputValidName() {
+        while (true) {
+            System.out.println("Введите имя нового пассажира: ");
+            String name = scanner.nextLine().trim();
+            if (ValidationUtils.isValidName(name)) {
+                return name;
+            }
+            System.out.println(ConsoleColor.RED.apply("Некорректное имя! Используйте только буквы и спецсимволы."));
+        }
+    }
+
+    private LocalDate inputValidBirthDate() {
+        while (true) {
             try {
-                System.out.println("Введите дату рождения (пример: yyyy-MM-dd): ");
+                System.out.println("Введите дату рождения (пример: " + DATE_PATTERN + "): ");
                 String bDate = scanner.nextLine();
-                birthDate = LocalDate.parse(bDate, FORMATTER);
+                LocalDate date = LocalDate.parse(bDate, FORMATTER);
+                if (ValidationUtils.isValidBirthDate(date)) {
+                    return date;
+                }
+                System.out.println(ConsoleColor.RED.apply("Пассажир должен быть старше 18 лет!"));
             } catch (DateTimeParseException e) {
-                System.out.println(ConsoleColor.RED.apply("Ошибка формата даты! Используйте формат: yyyy-MM-dd."));
+                System.out.println(ConsoleColor.RED.apply("Ошибка формата даты! Используйте формат: " + DATE_PATTERN + "."));
             }
         }
+    }
 
-        System.out.println("Введите E-Mail: ");
-        String email = scanner.nextLine();
+    private String inputValidEmail() {
+        while (true) {
+            System.out.println("Введите E-Mail: ");
+            String email = scanner.nextLine().trim();
+            if (ValidationUtils.isValidEmail(email)) {
+                return email;
+            }
+            System.out.println(ConsoleColor.RED.apply("Некорректный email! Пример: user@example.com"));
+        }
+    }
 
-        System.out.println("Введите номер телефона:");
-        String phone = scanner.nextLine();
-
-
-        Passenger passenger = new Passenger(name, birthDate, email, phone);
-
-        return passenger;
+    private String inputValidPhone() {
+        while (true) {
+            System.out.println("Введите номер телефона: ");
+            String phone = scanner.nextLine().trim();
+            if (ValidationUtils.isValidPhone(phone)) {
+                return phone;
+            }
+            System.out.println(ConsoleColor.RED.apply("Некорректный телефон! Пример: +7 999 123-45-67"));
+        }
     }
 
     /**
@@ -192,10 +226,10 @@ public class PassengerView {
     }
 
     private void updateBirthDate(Passenger passenger) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
         while (true) {
             try {
-                System.out.print("Введите новую дату рождения (" + formatter + ") или оставьте пустым: ");
+                System.out.print("Введите новую дату рождения (" + passenger.getDateOfBirth() + ") или оставьте пустым: ");
                 String input = scanner.nextLine().trim();
                 if (input.isEmpty()) break;
 
@@ -203,7 +237,7 @@ public class PassengerView {
                 passenger.setDateOfBirth(newDate);
                 break;
             } catch (DateTimeParseException e) {
-                System.out.println(ConsoleColor.RED.apply("Некорректный формат даты! Используйте yyyy-MM-dd."));
+                System.out.println(ConsoleColor.RED.apply("Некорректный формат даты! Используйте " + DATE_PATTERN + "."));
             }
         }
     }
@@ -225,7 +259,8 @@ public class PassengerView {
 
     private void updatePhone(Passenger passenger) {
         while (true) {
-            System.out.print("Введите новый телефон (оставьте пустым для сохранения текущего '" + passenger.getPhoneNumber() + "'): ");
+            System.out.print("Введите новый телефон (оставьте пустым для сохранения текущего '" +
+                    passenger.getPhoneNumber() + "'): ");
             String newPhone = scanner.nextLine().trim();
             if (newPhone.isEmpty()) break;
 

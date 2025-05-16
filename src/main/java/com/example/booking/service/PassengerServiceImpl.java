@@ -1,8 +1,11 @@
 package com.example.booking.service;
 
-import com.example.booking.exceptions.IncorrectPassangerDataException;
+import com.example.booking.exceptions.IncorrectPassengerDataException;
 import com.example.booking.model.Passenger;
 import com.example.booking.repository.PassengerRepository;
+import com.example.booking.utils.ValidationUtils;
+import com.example.booking.view.ConsoleColor;
+
 
 import java.util.Collections;
 import java.util.List;
@@ -28,24 +31,17 @@ public class PassengerServiceImpl implements PassengerService {
 
     @Override
     public boolean registerPassenger(Passenger passenger) {
-        if (!isValid(passenger)) {
-            return false;
-        }
-
-        if (passenger == null
-                || passenger.getName() == null || passenger.getName().isBlank()
-                || passenger.getPassportNumber() == null || passenger.getPassportNumber().isBlank()
-                || passenger.getDateOfBirth() == null) {
+        if (!isValid(passenger) || passenger.getPassportNumber() == null || passenger.getPassportNumber().isBlank()) {
             return false;
         }
 
         try {
             Passenger existing = passengerRepository.findByPassport(passenger.getPassportNumber());
             if (existing != null) {
-                return false; // Пассажир с таким паспортом уже существует
+                return false;
             }
             return passengerRepository.addPassenger(passenger);
-        } catch (IncorrectPassangerDataException e) {
+        } catch (IncorrectPassengerDataException e) {
             System.err.println("Ошибка регистрации пассажира: " + e.getMessage());
             return false;
         }
@@ -58,7 +54,7 @@ public class PassengerServiceImpl implements PassengerService {
         }
         try {
             return passengerRepository.findByPassport(passportNumber);
-        } catch (IncorrectPassangerDataException e) {
+        } catch (IncorrectPassengerDataException e) {
             System.err.println("Ошибка поиска пассажира: " + e.getMessage());
             return null;
         }
@@ -71,8 +67,8 @@ public class PassengerServiceImpl implements PassengerService {
         }
         try {
             return passengerRepository.deleteByPassport(passportNumber);
-        } catch (IncorrectPassangerDataException e) {
-            System.err.println("Ошибка удаления пассажира: " + e.getMessage());
+        } catch (IncorrectPassengerDataException e) {
+            System.out.println(ConsoleColor.RED.apply("Ошибка удаления пассажира: " + e.getMessage()));
             return false;
         }
     }
@@ -88,8 +84,8 @@ public class PassengerServiceImpl implements PassengerService {
         }
         try {
             return passengerRepository.update(passenger);
-        } catch (IncorrectPassangerDataException e) {
-            System.err.println("Ошибка обновления пассажира: " + e.getMessage());
+        } catch (IncorrectPassengerDataException e) {
+            System.out.println(ConsoleColor.RED.apply("Ошибка обновления пассажира: " + e.getMessage()));
             return false;
         }
     }
@@ -101,11 +97,12 @@ public class PassengerServiceImpl implements PassengerService {
     }
 
     public boolean isValid(Passenger passenger) {
-        // todo сделать метод валидации
-        // todo провести валидацию, что имя - это имя, почта введена корректно,
-        //  телефон содержит только цифры (использовать regex),
-        //  обработка даты рождения (избежать DateTimeException)
-        return true;
+        return passenger != null &&
+                ValidationUtils.isValidName(passenger.getName()) &&
+                ValidationUtils.isValidEmail(passenger.getEmail()) &&
+                ValidationUtils.isValidPhone(passenger.getPhoneNumber()) &&
+                ValidationUtils.isValidBirthDate(passenger.getDateOfBirth()) &&
+                passenger.getPassportNumber() != null &&
+                !passenger.getPassportNumber().isBlank();
     }
-
 }

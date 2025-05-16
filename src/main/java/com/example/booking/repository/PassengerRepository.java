@@ -1,6 +1,6 @@
 package com.example.booking.repository;
 
-import com.example.booking.exceptions.IncorrectPassangerDataException;
+import com.example.booking.exceptions.IncorrectPassengerDataException;
 import com.example.booking.model.Passenger;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public interface PassengerRepository {
      * @param passportNumber номер паспорта
      * @return объект Passenger, если найден, или null
      */
-    Passenger findByPassport(String passportNumber) throws IncorrectPassangerDataException;
+    Passenger findByPassport(String passportNumber) throws IncorrectPassengerDataException;
 
     /**
      * Сохраняет нового пассажира в систему.
@@ -36,12 +36,12 @@ public interface PassengerRepository {
      *
      * @param passenger объект Passenger, который нужно сохранить
      */
-    boolean addPassenger(Passenger passenger) throws IncorrectPassangerDataException;
+    boolean addPassenger(Passenger passenger) throws IncorrectPassengerDataException;
 
     List<Passenger> findAll();
 
-    boolean deleteByPassport(String passportNumber) throws IncorrectPassangerDataException;
+    boolean deleteByPassport(String passportNumber) throws IncorrectPassengerDataException;
 
-    boolean update(Passenger passenger) throws IncorrectPassangerDataException;
+    boolean update(Passenger passenger) throws IncorrectPassengerDataException;
 
 }

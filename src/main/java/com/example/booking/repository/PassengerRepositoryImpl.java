@@ -1,6 +1,6 @@
 package com.example.booking.repository;
 
-import com.example.booking.exceptions.IncorrectPassangerDataException;
+import com.example.booking.exceptions.IncorrectPassengerDataException;
 import com.example.booking.model.Passenger;
 
 import java.util.HashMap;
@@ -36,9 +36,9 @@ public class PassengerRepositoryImpl implements PassengerRepository {
      * @return объект {@code Passenger} или {@code null}, если не найден
      */
     @Override
-    public Passenger findByPassport(String passportNumber) throws IncorrectPassangerDataException {
+    public Passenger findByPassport(String passportNumber) throws IncorrectPassengerDataException {
         if (passportNumber == null || passportNumber.isBlank()) {
-            throw new IncorrectPassangerDataException("Ошибка! Номер паспорта не может быть пустым.");
+            throw new IncorrectPassengerDataException("Ошибка! Номер паспорта не может быть пустым.");
         }
         return storage.get(passportNumber);
     }
@@ -57,9 +57,9 @@ public class PassengerRepositoryImpl implements PassengerRepository {
      * @param passenger объект, который нужно сохранить
      */
     @Override
-    public boolean addPassenger(Passenger passenger) throws IncorrectPassangerDataException {
+    public boolean addPassenger(Passenger passenger) throws IncorrectPassengerDataException {
         if (passenger == null) {
-            throw new IncorrectPassangerDataException("Ошибка! Объект passenger не может быть равен null");
+            throw new IncorrectPassengerDataException("Ошибка! Объект passenger не может быть равен null");
         }
         storage.put(passenger.getPassportNumber(), passenger);
         return findByPassport(passenger.getPassportNumber()) != null;
@@ -79,9 +79,9 @@ public class PassengerRepositoryImpl implements PassengerRepository {
      * @param passenger обновлённый объект {@code Passenger}
      */
     @Override
-    public boolean update(Passenger passenger) throws IncorrectPassangerDataException {
+    public boolean update(Passenger passenger) throws IncorrectPassengerDataException {
         if (passenger == null) {
-            throw new IncorrectPassangerDataException("Ошибка! Объект passenger не может быть равен null");
+            throw new IncorrectPassengerDataException("Ошибка! Объект passenger не может быть равен null");
         }
         if (findByPassport(passenger.getPassportNumber()) == null) {
             return false;
@@ -106,9 +106,9 @@ public class PassengerRepositoryImpl implements PassengerRepository {
      * @param passportNumber номер паспорта удаляемого пассажира
      */
     @Override
-    public boolean deleteByPassport(String passportNumber) throws IncorrectPassangerDataException {
+    public boolean deleteByPassport(String passportNumber) throws IncorrectPassengerDataException {
         if (passportNumber == null || passportNumber.isBlank()) {
-            throw new IncorrectPassangerDataException("Ошибка! Номер паспорта не может быть пустым.");
+            throw new IncorrectPassengerDataException("Ошибка! Номер паспорта не может быть пустым.");
         }
         storage.remove(passportNumber);
 
