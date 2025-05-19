@@ -1,7 +1,11 @@
 package com.example.booking;
 
-import com.example.booking.repository.*;
-import com.example.booking.service.*;
+import com.example.booking.repository.flight.*;
+import com.example.booking.repository.passenger.*;
+import com.example.booking.repository.ticket.*;
+import com.example.booking.service.ticket.*;
+import com.example.booking.service.flight.*;
+import com.example.booking.service.passenger.*;
 import com.example.booking.views.*;
 import com.example.booking.views.console.*;
 
