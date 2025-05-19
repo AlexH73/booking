@@ -1,4 +1,4 @@
-package com.example.booking.views;
+package com.example.booking.views.console;
 
 public enum ConsoleColor {
     RED("\033[31m"),      // Красный

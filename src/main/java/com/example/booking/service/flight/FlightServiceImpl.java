@@ -1,7 +1,7 @@
-package com.example.booking.service;
+package com.example.booking.service.flight;
 
 import com.example.booking.model.Flight;
-import com.example.booking.repository.FlightRepository;
+import com.example.booking.repository.flight.FlightRepository;
 
 import java.util.Collections;
 import java.util.List;

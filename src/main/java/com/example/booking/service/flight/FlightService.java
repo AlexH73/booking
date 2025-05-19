@@ -1,4 +1,4 @@
-package com.example.booking.service;
+package com.example.booking.service.flight;
 
 import com.example.booking.model.Flight;
 

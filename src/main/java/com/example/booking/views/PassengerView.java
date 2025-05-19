@@ -1,8 +1,9 @@
 package com.example.booking.views;
 
 import com.example.booking.model.Passenger;
-import com.example.booking.service.PassengerService;
-import com.example.booking.utils.ValidationUtils;
+import com.example.booking.service.passenger.PassengerService;
+import com.example.booking.service.validation.ValidationUtils;
+import com.example.booking.views.console.ConsoleColor;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

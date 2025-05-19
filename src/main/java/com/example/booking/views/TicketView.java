@@ -4,9 +4,9 @@ import com.example.booking.model.Flight;
 import com.example.booking.model.Passenger;
 import com.example.booking.model.Ticket;
 import com.example.booking.model.TicketStatus;
-import com.example.booking.service.BookingService;
-import com.example.booking.service.FlightService;
-import com.example.booking.service.PassengerService;
+import com.example.booking.service.ticket.BookingService;
+import com.example.booking.service.flight.FlightService;
+import com.example.booking.service.passenger.PassengerService;
 
 import java.util.List;
 import java.util.Scanner;

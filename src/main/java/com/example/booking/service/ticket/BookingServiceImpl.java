@@ -1,11 +1,11 @@
-package com.example.booking.service;
+package com.example.booking.service.ticket;
 
 import com.example.booking.model.Flight;
 import com.example.booking.model.Passenger;
 import com.example.booking.model.Ticket;
 import com.example.booking.model.TicketStatus;
-import com.example.booking.repository.FlightRepository;
-import com.example.booking.repository.TicketRepository;
+import com.example.booking.repository.flight.FlightRepository;
+import com.example.booking.repository.ticket.TicketRepository;
 
 import java.util.List;
 import java.util.Objects;

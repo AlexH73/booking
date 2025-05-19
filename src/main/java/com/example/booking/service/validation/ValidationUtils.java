@@ -1,4 +1,4 @@
-package com.example.booking.utils;
+package com.example.booking.service.validation;
 
 import java.time.LocalDate;
 import java.util.regex.Pattern;

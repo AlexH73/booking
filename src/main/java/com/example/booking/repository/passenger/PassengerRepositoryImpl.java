@@ -1,4 +1,4 @@
-package com.example.booking.repository;
+package com.example.booking.repository.passenger;
 
 import com.example.booking.exceptions.IncorrectPassengerDataException;
 import com.example.booking.model.Passenger;

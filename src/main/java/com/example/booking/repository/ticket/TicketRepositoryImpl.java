@@ -1,4 +1,4 @@
-package com.example.booking.repository;
+package com.example.booking.repository.ticket;
 
 import com.example.booking.model.Passenger;
 import com.example.booking.model.Ticket;

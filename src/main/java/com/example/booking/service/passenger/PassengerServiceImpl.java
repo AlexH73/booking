@@ -1,10 +1,10 @@
-package com.example.booking.service;
+package com.example.booking.service.passenger;
 
 import com.example.booking.exceptions.IncorrectPassengerDataException;
 import com.example.booking.model.Passenger;
-import com.example.booking.repository.PassengerRepository;
-import com.example.booking.utils.ValidationUtils;
-import com.example.booking.views.ConsoleColor;
+import com.example.booking.repository.passenger.PassengerRepository;
+import com.example.booking.service.validation.ValidationUtils;
+import com.example.booking.views.console.ConsoleColor;
 
 
 import java.util.Collections;

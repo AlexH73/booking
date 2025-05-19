@@ -1,7 +1,7 @@
 package com.example.booking.views;
 
 import com.example.booking.model.Flight;
-import com.example.booking.service.FlightService;
+import com.example.booking.service.flight.FlightService;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
